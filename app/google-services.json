@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "300688704950",
+    "project_id": "e-commerce-d35ea",
+    "storage_bucket": "e-commerce-d35ea.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:300688704950:android:c6e47439133967fd3e2d17",
+        "android_client_info": {
+          "package_name": "com.phoenix.ecommerce"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4FyU32JhZtrLcPp2TW5Owuw3GPgIGCT4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
