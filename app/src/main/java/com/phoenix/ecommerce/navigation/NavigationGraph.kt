@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import com.phoenix.ecommerce.cart.CartScreen
 import com.phoenix.ecommerce.homepage.HomeScreen
 import com.phoenix.ecommerce.login.LoginScreen
+import com.phoenix.ecommerce.products.ProductsScreen
 
 
 @Composable
@@ -22,6 +23,9 @@ fun NavigationGraph(navHostController: NavHostController){
         }
         composable(Routes.CART_SCREEN) {
             CartScreen(navHostController)
+        }
+        composable(Routes.PRODUCT_SCREEN) {
+            ProductsScreen(navHostController)
         }
 
     }

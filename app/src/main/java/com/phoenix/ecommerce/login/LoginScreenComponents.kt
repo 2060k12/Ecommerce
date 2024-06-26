@@ -35,7 +35,6 @@ fun LoginComponentsPreview(){
 LoginTextBox(textBox = "Email", type = "Email")
 }
 
-
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun LoginComponentsPreviewUi(){

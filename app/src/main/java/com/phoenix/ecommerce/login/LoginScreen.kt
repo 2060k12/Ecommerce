@@ -132,7 +132,9 @@ fun LoginScreen(navController: NavController){
                 .fillMaxWidth()
                 .padding(16.dp, 0.dp, 16.dp, 0.dp),
             shape = RoundedCornerShape(4.dp),
-            onClick = { /*TODO*/ }) {
+            onClick = {
+                navController.navigate(Routes.PRODUCT_SCREEN)
+            }) {
             Text(text = "Sign up")
             
         }

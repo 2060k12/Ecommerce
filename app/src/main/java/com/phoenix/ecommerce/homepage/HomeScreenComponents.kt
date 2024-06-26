@@ -20,6 +20,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -47,32 +48,34 @@ fun OfferBanner(){
 @Preview(showSystemUi = true)
 fun EachProducts(){
     Box(modifier = Modifier
-        .width(150.dp)
+        .width(180.dp)
         .wrapContentHeight()
         ){
         Column(
         ) {
 
             Card(
-                shape = RoundedCornerShape(20.dp),
+                shape = RectangleShape,
                 modifier = Modifier
-                    .size(150.dp)
+                    .size(180.dp)
             ) {
 
             }
 
             Spacer(modifier = Modifier.height(4.dp))
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
+            Column(
+                modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
-                    text = "Apple")
+                    fontSize = 20.sp,
+                    text = "Apple Computers")
 
                 Text(
+                    fontSize = 20.sp,
                     fontWeight = FontWeight.SemiBold,
-                    text = "AU $24")
+                    text = "$24")
             }
+            Spacer(modifier = Modifier.height(8.dp))
 
         }
     }
