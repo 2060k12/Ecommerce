@@ -32,19 +32,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavController
 import com.google.android.play.integrity.internal.s
+import com.phoenix.ecommerce.data.data.product.Products
 import com.phoenix.ecommerce.utils.BottomNavBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(navController: NavController){
+
+    val viewModel = HomeScreenViewModel()
+
+
     Surface(modifier = Modifier.fillMaxSize()) {
         
         Scaffold(
             modifier = Modifier.fillMaxSize(),
-            
-            
             topBar = {
                 TopAppBar(title = { 
                     Text(text = "Home")
@@ -77,7 +81,7 @@ fun HomeScreen(navController: NavController){
                         ){
 
                        items(10){
-                           EachProducts()
+                           EachProducts(Products("Try Product","1223131","$20","https://images.unsplash.com/photo-1719150016704-270c5a0deee4?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyfHx8ZW58MHx8fHx8"))
 
 
                     }}

@@ -8,6 +8,8 @@ import com.phoenix.ecommerce.cart.CartScreen
 import com.phoenix.ecommerce.homepage.HomeScreen
 import com.phoenix.ecommerce.login.LoginScreen
 import com.phoenix.ecommerce.products.ProductsScreen
+import com.phoenix.ecommerce.profile.ProfileScreen
+import com.phoenix.ecommerce.search.SearchScreen
 
 
 @Composable
@@ -26,6 +28,12 @@ fun NavigationGraph(navHostController: NavHostController){
         }
         composable(Routes.PRODUCT_SCREEN) {
             ProductsScreen(navHostController)
+        }
+        composable(Routes.SEARCH_SCREEN) {
+            SearchScreen(navHostController)
+        }
+        composable(Routes.PROFILE_SCREEN) {
+            ProfileScreen(navHostController)
         }
 
     }

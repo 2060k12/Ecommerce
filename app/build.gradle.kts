@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId = "com.phoenix.ecommerce"
-        minSdk = 24
+        minSdk = 27
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -61,6 +61,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.firebase.auth)
+    implementation(libs.firebase.firestore)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -70,5 +71,10 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
     implementation(libs.navigation.compose)
+
+    // Coil for images
+    implementation("io.coil-kt:coil-compose:2.6.0")
+
+
 
 }

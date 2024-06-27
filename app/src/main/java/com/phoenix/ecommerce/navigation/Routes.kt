@@ -5,4 +5,6 @@ object Routes {
     const val HOME_SCREEN = "HOME_SCREEN"
     const val CART_SCREEN = "CART_SCREEN"
     const val PRODUCT_SCREEN = "PRODUCT_SCREEN"
+    const val SEARCH_SCREEN = "SEARCH_SCREEN"
+    const val PROFILE_SCREEN = "PROFILE_SCREEN"
 }

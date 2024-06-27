@@ -38,7 +38,7 @@ fun BottomNavBar(navController: NavController){
             // Search Screen
 
             IconButton(onClick = {
-//                navController.navigate(Routes.SEARCH_SCREEN)
+                navController.navigate(Routes.SEARCH_SCREEN)
             }) {
                 Icon(painter = rememberVectorPainter(image = Icons.Default.Search), contentDescription = "Search")
             }
@@ -53,7 +53,7 @@ fun BottomNavBar(navController: NavController){
 
             // Profile Screen
             IconButton(onClick = {
-//                navController.navigate(Routes.CART_SCREEN)
+                navController.navigate(Routes.PROFILE_SCREEN)
             }) {
                 Icon(painter = rememberVectorPainter(image = Icons.Default.AccountCircle), contentDescription = "Profile")
             }
