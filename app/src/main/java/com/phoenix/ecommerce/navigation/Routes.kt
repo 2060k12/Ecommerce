@@ -7,4 +7,6 @@ object Routes {
     const val PRODUCT_SCREEN = "PRODUCT_SCREEN"
     const val SEARCH_SCREEN = "SEARCH_SCREEN"
     const val PROFILE_SCREEN = "PROFILE_SCREEN"
+    const val CHECKOUT_SCREEN = "CHECKOUT_SCREEN"
+    const val SIGNUP_SCREEN = "SIGNUP_SCREEN"
 }

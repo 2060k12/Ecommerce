@@ -94,7 +94,7 @@ fun EachProducts(products: Products, navController: NavController){
                 Text(
                     fontSize = 20.sp,
                     fontWeight = FontWeight.SemiBold,
-                    text = products.productCost)
+                    text = "AU$ " + products.productCost.toString())
             }
             Spacer(modifier = Modifier.height(8.dp))
 

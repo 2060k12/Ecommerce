@@ -1,6 +1,5 @@
 package com.phoenix.ecommerce.products
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -13,12 +12,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import com.phoenix.ecommerce.R
 import com.phoenix.ecommerce.data.data.product.Products
 
 
@@ -50,7 +47,7 @@ fun ProductDetail(products: Products){
         Text(
             fontSize = 20.sp,
             fontWeight = FontWeight.Normal,
-            text = products.productCost )
+            text = "AU$ " + products.productCost.toString())
         Text(
             fontSize = 20.sp,
             fontWeight = FontWeight.SemiBold,

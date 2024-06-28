@@ -1,11 +1,15 @@
 package com.phoenix.ecommerce.cart
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -19,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import com.phoenix.ecommerce.navigation.Routes
 import com.phoenix.ecommerce.utils.BottomNavBar
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -35,7 +40,23 @@ fun CartScreen(navController: NavController){
         },
 
         bottomBar = {
-            BottomNavBar(navController)
+            Column {
+                Button(
+                    shape = RoundedCornerShape(10.dp),
+                    modifier = Modifier.fillMaxWidth()
+                        .padding(vertical = 8.dp, horizontal = 16.dp),
+                    onClick = {
+
+                        // Navigates to checkout screen
+                        navController.navigate(Routes.CHECKOUT_SCREEN)
+
+                    }) {
+                    Text(text = "Checkout")
+
+                }
+                BottomNavBar(navController)
+            }
+
         }
 
     ) {
@@ -55,6 +76,8 @@ fun CartScreen(navController: NavController){
 
                 }
             }
+
+
 
         }
     }

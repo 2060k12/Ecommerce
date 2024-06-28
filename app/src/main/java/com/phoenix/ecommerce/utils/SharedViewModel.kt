@@ -8,7 +8,7 @@ import com.phoenix.ecommerce.data.data.product.Products
 
 class SharedViewModel : ViewModel() {
 
-    var product by mutableStateOf<Products>(Products("","","","",""))
+    var product by mutableStateOf<Products>(Products("","",0,"",""))
         private set
 
 

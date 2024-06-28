@@ -7,13 +7,13 @@ import kotlinx.parcelize.Parcelize
 data class Products(
     val productName :String,
     var productId: String,
-    val productCost : String,
+    val productCost : Int,
     val productIconUrl : String,
     val productInfo : String,
 ) : Parcelable {
     constructor() : this( "",
         "",
-        "",
+        0,
         "",
         ""
         )

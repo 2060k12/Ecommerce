@@ -104,11 +104,9 @@ Scaffold (
                     }
 
                     else{
-                        val tempCart = cartProduct?.copy()
-                        tempCart?.productCount = tempCart?.productCount?.plus(1)
-                        if (tempCart != null) {
-                            cartViewModel.updateCart(tempCart)
-                        }
+                        val tempCart = cartProduct.copy()
+                        tempCart.productCount = tempCart.productCount?.plus(1)
+                        cartViewModel.updateCart(tempCart)
                     }
 
                 }
