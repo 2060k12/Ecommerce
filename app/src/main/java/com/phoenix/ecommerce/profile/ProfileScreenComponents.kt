@@ -23,9 +23,11 @@ import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.MailOutline
 import androidx.compose.material.icons.filled.Phone
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -218,12 +220,48 @@ fun ProfileNotification(){
 fun ProfileVersion(){
     Column(
 
-        modifier = Modifier.fillMaxWidth()
-            .padding(vertical = 32.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ){
-        Text(text = "Version 1.0.0")
-        Text(text = "Copyright \u00A9 2024, all rights reserved")
+        Text(
+            fontSize = 12.sp,
+            text = "Version 1.0.0")
+        Text(
+            fontSize = 12.sp,
+            text = "Copyright \u00A9 2024, all rights reserved")
     }
+}
+
+@Composable
+fun SignOutFeature(onClick : ()->Unit){
+    Button(
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .fillMaxWidth(),
+        shape = RoundedCornerShape(5.dp),
+        onClick = {
+            // SignOut
+            onClick()
+        }) {
+
+        Text(text = "Sign out")
+
+    }
+    OutlinedButton(
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .fillMaxWidth(),
+        shape = RoundedCornerShape(5.dp),
+        onClick = {
+            // Delete Account
+            // TODO: Delete account implementation
+        }) {
+
+        Text(text = "Delete Account")
+
+    }
+
 }

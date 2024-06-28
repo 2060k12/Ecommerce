@@ -4,6 +4,7 @@ import android.util.Log
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.firestore
+import com.phoenix.ecommerce.R
 import kotlinx.coroutines.tasks.await
 import okhttp3.Address
 import okhttp3.Callback
@@ -66,7 +67,12 @@ class LoginRepository {
 
     // SignOut current User
     fun signOut() {
-        auth.signOut()
+        try {
+            auth.signOut()
+        }
+        catch (e :Exception){
+            Log.e("Error Signing Out", e.message.toString())
+        }
     }
 
 

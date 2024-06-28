@@ -86,6 +86,7 @@ fun SignUpScreen(navController: NavController){
                             if(success){
                                 navController.navigate(Routes.LOGIN_SCREEN)
                                 Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show()
+
                                 viewModel.signOut()
                             }
                             else{
