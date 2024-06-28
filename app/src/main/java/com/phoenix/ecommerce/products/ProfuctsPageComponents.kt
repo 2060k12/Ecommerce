@@ -17,48 +17,54 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.phoenix.ecommerce.R
+import com.phoenix.ecommerce.data.data.product.Products
 
 
 @Composable
-fun ProductImageView(){
+fun ProductImageView(products: Products){
 
-    Image(
+    AsyncImage(
+        model = products.productIconUrl,
         contentScale = ContentScale.Crop,
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
             .aspectRatio(16f / 9f)
-            .clip(RoundedCornerShape(10.dp))
+            .clip(RoundedCornerShape(20.dp))
         ,
-        painter = painterResource(id = R.drawable.ic_launcher_background), contentDescription = "")
+        contentDescription = ""
+    )
 
 }
 
 @Composable
-fun ProductDetail(productName : String, productCost: String, productRating : String){
+fun ProductDetail(products: Products){
 
     Column(modifier = Modifier.padding(16.dp, 8.dp, 16.dp,8.dp)) {
         Text(
             fontSize = 28.sp,
             fontWeight = FontWeight.Normal,
-            text = productName)
+            text = products.productName)
         Text(
             fontSize = 20.sp,
             fontWeight = FontWeight.Normal,
-            text = productCost )
+            text = products.productCost )
         Text(
             fontSize = 20.sp,
             fontWeight = FontWeight.SemiBold,
-            text = productRating)
+            text = "5")
     }
 }
 
 
 
 @Composable
-fun ProductAddQuantitySelector(){
-    // TODO: Drop down  
+fun ProductsInfo(products: Products){
+    Text(
+        modifier = Modifier.padding(horizontal = 16.dp),
+        text = products.productInfo )
 }
 
 @Composable

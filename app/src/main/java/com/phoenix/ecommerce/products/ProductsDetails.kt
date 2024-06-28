@@ -34,43 +34,86 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import androidx.room.util.copy
+import com.phoenix.ecommerce.cart.CartViewModel
+import com.phoenix.ecommerce.data.data.product.Products
+import com.phoenix.ecommerce.data.local.cartDatabase.CartProduct
 import com.phoenix.ecommerce.utils.FilledButton
 import com.phoenix.ecommerce.utils.OutlinedButton
+import com.phoenix.ecommerce.utils.SharedViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
-fun ProductsScreen(navController: NavController){
-val productName : String = "Text Product"
+fun ProductsScreen(navController: NavController, productId: String){
 val context = LocalContext.current
+
+    // initializing viewmodel
+    val viewModel : ProductsViewModel = viewModel()
+
+    // cart view model
+    val cartViewModel : CartViewModel = viewModel()
+
+    viewModel.getProduct(productId)
+    val product : Products? = viewModel.clickedProduct.value
+
+
 Scaffold (
 
     topBar = {
         TopAppBar(
-//            colors = TopAppBarColors(
-//                titleContentColor = MaterialTheme.colorScheme.primary,
-//                containerColor = MaterialTheme.colorScheme.primaryContainer,
-//                actionIconContentColor = MaterialTheme.colorScheme.primary,
-//                scrolledContainerColor = MaterialTheme.colorScheme.primaryContainer,
-//                navigationIconContentColor = MaterialTheme.colorScheme.primary
-//            ),
             navigationIcon = {
                 IconButton(onClick = { navController.navigateUp() }) {
                     Icon(imageVector = Icons.AutoMirrored.Default.ArrowBack, contentDescription = " Back Button" )
                 }
             },
             title = {
-            Text(text = productName)
+                product?.productName?.let { Text(text = it) }
         })
     },
 
     bottomBar = {
 
-        Column (Modifier.wrapContentHeight()
-            .padding(bottom = 30.dp)){
+        Column (
+            Modifier
+                .wrapContentHeight()
+                .padding(bottom = 30.dp)){
             OutlinedButton("Add to Cart"){
+
+                cartViewModel.getItemByID(productId){
+                    cartProduct ->
+
+                    if(cartProduct == null){
+                        val tempCart = product?.let {
+                            CartProduct(
+                                productId = productId,
+                                productName = product.productName,
+                                productCost = product.productCost,
+                                productInfo = product.productInfo,
+                                productIconUrl = product.productIconUrl,
+                                productCount = 1
+                            )
+                        }
+                        if (tempCart != null) {
+                            cartViewModel.addToCart(tempCart)
+                        }
+                    }
+
+                    else{
+                        val tempCart = cartProduct?.copy()
+                        tempCart?.productCount = tempCart?.productCount?.plus(1)
+                        if (tempCart != null) {
+                            cartViewModel.updateCart(tempCart)
+                        }
+                    }
+
+                }
+
+
                 Toast.makeText(context, "Pressed Add Cart", Toast.LENGTH_SHORT).show()
 
             }
@@ -100,10 +143,9 @@ Scaffold (
                             state = pagerState
                         ) { page ->
 
-
-                            ProductImageView()
-
-
+                            if (product != null) {
+                                ProductImageView(product)
+                            }
                         }
                         Row(
                             modifier = Modifier
@@ -134,17 +176,16 @@ Scaffold (
                 }
                 // Product Detail
                 item {
-                ProductDetail(productName = "Fender Stratocaster", productCost = "$1000", productRating = "5")
+                    if (product != null) {
+                        ProductDetail(product)
+                    }
 
                 }
+
                 item {
-                    ProductAddQuantitySelector()
-                }
-                item {
-                    ProductSpecs("About this item", "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum." +
-                            "" +
-                            "" +
-                            "")
+                    if (product != null) {
+                        ProductsInfo(product)
+                    }
                 }
 
 
@@ -152,9 +193,6 @@ Scaffold (
 
     }
 )
-
-
-
 
     ProductsCustomerReview()
 
@@ -164,5 +202,5 @@ Scaffold (
 @Preview(showSystemUi = true)
 @Composable
 fun ProductScreenView(){
-    ProductsScreen(navController = rememberNavController())
+    ProductsScreen(navController = rememberNavController(), productId = "")
 }

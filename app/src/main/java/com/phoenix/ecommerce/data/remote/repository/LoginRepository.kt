@@ -1,4 +1,4 @@
-package com.phoenix.ecommerce.data.repository
+package com.phoenix.ecommerce.data.remote.repository
 
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth

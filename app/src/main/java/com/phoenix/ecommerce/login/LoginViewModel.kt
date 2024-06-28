@@ -1,7 +1,7 @@
 package com.phoenix.ecommerce.login
 
 import androidx.lifecycle.ViewModel
-import com.phoenix.ecommerce.data.repository.LoginRepository
+import com.phoenix.ecommerce.data.remote.repository.LoginRepository
 
 class LoginViewModel :ViewModel() {
 

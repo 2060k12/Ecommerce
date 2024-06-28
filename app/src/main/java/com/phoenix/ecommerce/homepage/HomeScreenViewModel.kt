@@ -2,7 +2,7 @@ package com.phoenix.ecommerce.homepage
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.phoenix.ecommerce.data.repository.ProductsRepository
+import com.phoenix.ecommerce.data.remote.repository.ProductsRepository
 import kotlinx.coroutines.launch
 
 class HomeScreenViewModel: ViewModel() {
@@ -12,7 +12,7 @@ class HomeScreenViewModel: ViewModel() {
     private val productRepository = ProductsRepository()
 
     // livedata for our product list
-    val produstList = productRepository.productList
+    val productList get() =  productRepository.productList
 
     // function to get allProducts from firestore database
     // getAllProduct is a suspend function in ProductRepository
