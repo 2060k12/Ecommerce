@@ -14,8 +14,23 @@ class LoginRepository {
     private val db = Firebase.firestore
 
 
-   fun loginUser(email: String, password: String){
-
+    fun loginUser(email: String, password: String, callback : (Boolean)-> Unit) {
+        try {
+            auth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener{
+                    task->
+                    if(task.isSuccessful){
+                        callback(true)
+                    }
+                    else{
+                        callback(false)
+                    }
+                }
+        }
+        catch (e : Exception){
+            callback(false)
+            Log.e("Error Logging", e.message.toString())
+        }
    }
 
 

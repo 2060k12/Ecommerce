@@ -1,5 +1,6 @@
 package com.phoenix.ecommerce.login
 
+import androidx.compose.runtime.MutableState
 import androidx.lifecycle.ViewModel
 import com.phoenix.ecommerce.data.remote.repository.LoginRepository
 
@@ -16,5 +17,10 @@ class LoginViewModel :ViewModel() {
 
     fun signOut() {
         repository.signOut()
+    }
+
+    fun login(email: String, password: String, callback : (Boolean)-> Unit) {
+        repository.loginUser(email, password, callback)
+
     }
 }

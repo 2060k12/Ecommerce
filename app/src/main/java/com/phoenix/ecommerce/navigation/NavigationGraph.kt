@@ -23,10 +23,10 @@ import com.phoenix.ecommerce.utils.SharedViewModel
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
-fun NavigationGraph(navHostController: NavHostController){
+fun NavigationGraph(navHostController: NavHostController, startDestination : String){
 
     val sharedViewModel : SharedViewModel = viewModel()
-    NavHost(navController = navHostController, startDestination = Routes.LOGIN_SCREEN) {
+    NavHost(navController = navHostController, startDestination = startDestination) {
 
         // Home Screen
         composable(Routes.HOME_SCREEN){

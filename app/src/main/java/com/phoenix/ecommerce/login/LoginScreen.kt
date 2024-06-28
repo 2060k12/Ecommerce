@@ -33,6 +33,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.phoenix.ecommerce.navigation.Routes
@@ -44,6 +45,10 @@ fun LoginScreen(navController: NavController){
     val email  = remember{ mutableStateOf("") }
     val password  = remember{ mutableStateOf("") }
     val context = LocalContext.current
+
+
+    // viewmodel
+    val viewModel : LoginViewModel = viewModel()
 
     Scaffold(
         bottomBar = {
@@ -58,8 +63,16 @@ fun LoginScreen(navController: NavController){
                     .padding(16.dp, 8.dp, 16.dp, 0.dp),
                 shape = RoundedCornerShape(4.dp),
                 onClick = {
+                    viewModel.login(email.value, password.value){
+                        success ->
+                        if(success){
+                            navController.navigate(Routes.HOME_SCREEN)
 
-                    navController.navigate(Routes.HOME_SCREEN)
+                        }
+                        else{
+                            Toast.makeText(context, "Failed To login ", Toast.LENGTH_SHORT).show()
+                        }
+                    }
 
                 },
             ) {
