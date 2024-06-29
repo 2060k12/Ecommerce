@@ -1,4 +1,4 @@
-package com.phoenix.ecommerce.products
+package com.phoenix.ecommerce.customers.products
 
 import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -35,16 +35,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import androidx.room.util.copy
-import com.phoenix.ecommerce.cart.CartViewModel
+import com.phoenix.ecommerce.customers.cart.CartViewModel
 import com.phoenix.ecommerce.data.data.product.Products
 import com.phoenix.ecommerce.data.local.cartDatabase.CartProduct
 import com.phoenix.ecommerce.utils.FilledButton
 import com.phoenix.ecommerce.utils.OutlinedButton
-import com.phoenix.ecommerce.utils.SharedViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)

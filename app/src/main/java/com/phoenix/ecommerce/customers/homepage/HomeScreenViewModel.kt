@@ -1,4 +1,4 @@
-package com.phoenix.ecommerce.homepage
+package com.phoenix.ecommerce.customers.homepage
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

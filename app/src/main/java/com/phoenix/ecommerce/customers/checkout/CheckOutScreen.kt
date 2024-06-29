@@ -1,4 +1,4 @@
-package com.phoenix.ecommerce.checkout
+package com.phoenix.ecommerce.customers.checkout
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -67,7 +67,8 @@ fun CheckOutScreen(){
         Surface(modifier = Modifier.padding(innerPadding)) {
             CheckOutAddress("Home", "20 albert Parade,\nAshfield, 2131\nNSW")
 
-            CheckOutPayment()}
+            CheckOutPayment()
+        }
     }
 }
 

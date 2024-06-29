@@ -1,4 +1,4 @@
-package com.phoenix.ecommerce.cart
+package com.phoenix.ecommerce.customers.cart
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

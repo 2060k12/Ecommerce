@@ -1,4 +1,4 @@
-package com.phoenix.ecommerce.homepage
+package com.phoenix.ecommerce.customers.homepage
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -20,19 +20,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontVariation.width
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import coil.Coil
 import coil.compose.AsyncImage
-import com.google.android.play.integrity.internal.s
 import com.phoenix.ecommerce.R
 import com.phoenix.ecommerce.data.data.product.Products
 import com.phoenix.ecommerce.navigation.Routes

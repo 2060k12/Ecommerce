@@ -1,4 +1,4 @@
-package com.phoenix.ecommerce.products
+package com.phoenix.ecommerce.customers.products
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer

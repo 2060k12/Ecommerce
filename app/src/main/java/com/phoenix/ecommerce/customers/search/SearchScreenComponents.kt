@@ -1,4 +1,4 @@
-package com.phoenix.ecommerce.search
+package com.phoenix.ecommerce.customers.search
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -12,7 +12,6 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.google.android.play.core.integrity.z
 
 
 @Composable

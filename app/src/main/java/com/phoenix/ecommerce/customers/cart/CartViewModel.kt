@@ -1,9 +1,8 @@
-package com.phoenix.ecommerce.cart
+package com.phoenix.ecommerce.customers.cart
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.phoenix.ecommerce.data.local.cartDatabase.CartProduct
 import com.phoenix.ecommerce.data.local.cartDatabase.MyCartDatabase

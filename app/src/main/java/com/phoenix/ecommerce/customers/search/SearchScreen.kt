@@ -1,4 +1,4 @@
-package com.phoenix.ecommerce.search
+package com.phoenix.ecommerce.customers.search
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.padding
