@@ -2,8 +2,8 @@ package com.phoenix.ecommerce.data.data.product
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
-@Parcelize
 data class Products(
     val productCategory : String,
     val productName :String,
@@ -13,15 +13,5 @@ data class Products(
     val productInfo : String,
     val productColor : String,
     val productSpecs : String,
-) : Parcelable {
-    constructor() : this( "",
-        "",
-        "",
-        0,
-        "",
-        "",
-        "",
+)
 
-        ""
-        )
-}

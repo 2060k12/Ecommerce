@@ -3,8 +3,8 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.google.gms.google.services)
     id("kotlin-parcelize")
+    alias(libs.plugins.kotlin.serialization)
     id("kotlin-kapt") // Add kotlin-kapt plugin here
-
 
 
 }
@@ -86,6 +86,8 @@ dependencies {
     annotationProcessor(libs.androidx.room.compiler)
     kapt("androidx.room:room-compiler:2.6.1")
     implementation(libs.androidx.room.ktx)
+
+    implementation (libs.kotlinx.serialization.json)
 
 
 

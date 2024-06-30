@@ -46,15 +46,23 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
+import com.phoenix.ecommerce.data.data.product.Products
 import com.phoenix.ecommerce.navigation.Routes
+import com.phoenix.ecommerce.navigation.RoutesAdmin
 import com.phoenix.ecommerce.utils.AdminNavigationBar
+import com.phoenix.ecommerce.utils.SharedViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddProductScreen(navController: NavController){
+
+    val sharedViewModel : SharedViewModel = viewModel()
+
 
     // link for our image
     var imageLink by remember {
@@ -241,7 +249,15 @@ fun AddProductScreen(navController: NavController){
                     onClick = {
                         // takes to next page
                         if(productCost.isNotEmpty() && productName.isNotEmpty() && productCategory.isNotEmpty() && productInfo.isNotEmpty()) {
-                            navController.navigate("ADMIN_ADD_TWO/${productName}/${productCost}/${productCategory}/${productInfo}/${imageLink.toString()}")
+
+                            navController.navigate(RoutesAdmin.AdminAddScreenTwo(
+                                productName =  productName,
+                                productCost = productCost,
+                                productCategory = productCategory,
+                                imageLink = imageLink.toString(),
+                                productInfo = productInfo
+                            ))
+
                         }
                         else{
                             Toast.makeText(context, "Please fill Everything before continuing", Toast.LENGTH_SHORT).show()

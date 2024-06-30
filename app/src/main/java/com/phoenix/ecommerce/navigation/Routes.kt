@@ -1,5 +1,7 @@
 package com.phoenix.ecommerce.navigation
 
+import kotlinx.serialization.Serializable
+
 object Routes {
     const val ADMIN_DASHBOARD= "ADMIN_DASHBOARD"
     const val ADMIN_ADD= "ADMIN_ADD"
@@ -12,5 +14,26 @@ object Routes {
     const val PROFILE_SCREEN = "PROFILE_SCREEN"
     const val CHECKOUT_SCREEN = "CHECKOUT_SCREEN"
     const val SIGNUP_SCREEN = "SIGNUP_SCREEN"
+
+}
+
+@Serializable
+sealed class RoutesAdmin{
+    @Serializable
+    data object AdminDashBoard : RoutesAdmin()
+
+    @Serializable
+    data object AdminAddScreenOne : RoutesAdmin(
+    )
+
+    @Serializable
+    data class AdminAddScreenTwo(
+        val productName :String,
+        val productCost : String,
+        val productInfo : String,
+        val imageLink : String,
+        val productCategory: String
+
+    ) : RoutesAdmin()
 
 }

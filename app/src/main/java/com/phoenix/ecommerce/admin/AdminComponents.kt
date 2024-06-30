@@ -1,27 +1,45 @@
 package com.phoenix.ecommerce.admin
 
 import android.net.Uri
+import android.support.v4.os.IResultReceiver.Default
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material3.AssistChip
+import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ChipColors
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDirection.Companion.Content
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.serialization.json.JsonNull.content
 
 
 // card to add new product
@@ -69,3 +87,25 @@ fun galleryLauncher( callback : (imageLink: Uri)-> Unit): (() -> Unit){
     return { galleryLauncher.launch("image/*") }
 
 }
+
+
+@Composable
+fun EachColorPickerCard(containerColor: Color,  colorName: String, onClick : () -> Unit ){
+    var checkedState by remember { mutableStateOf(false)}
+    var color = Color.White
+    if(colorName.lowercase() == "white")  color = Color.Black
+    var selectedChip = remember {
+
+    mutableStateOf(true)}
+    AssistChip(
+        enabled = selectedChip.value,
+        colors = AssistChipDefaults.assistChipColors(containerColor = containerColor, labelColor = color),
+        onClick = {
+            selectedChip.value = false
+            onClick() },
+        label = {
+            Text(text = colorName)
+        })
+}
+
+
