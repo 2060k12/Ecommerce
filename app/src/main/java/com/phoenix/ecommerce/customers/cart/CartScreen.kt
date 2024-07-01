@@ -20,14 +20,33 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.phoenix.ecommerce.data.data.product.Products
 import com.phoenix.ecommerce.navigation.Routes
+import com.phoenix.ecommerce.navigation.RoutesAdmin
 import com.phoenix.ecommerce.utils.BottomNavBar
+import com.phoenix.ecommerce.utils.SharedViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CartScreen(navController: NavController){
+fun CartScreen(navController: NavController, sharedViewModel: SharedViewModel){
     val viewModel : CartViewModel = viewModel()
     val cartList = viewModel.cartList.observeAsState(initial = ArrayList()).value
+    val productList = ArrayList<Products>()
+
+
+    for (cartProduct in cartList) {
+        val product = Products(
+            cartProduct.productCategory,
+            cartProduct.productName,
+            cartProduct.productId,
+            cartProduct.productCost,
+            cartProduct.productIconUrl,
+            cartProduct.productInfo!!,
+            listOf(cartProduct.productSpec),
+            listOf(cartProduct.productColor)
+        )
+        productList.add(product)
+    }
 
     Scaffold(
         topBar = {
@@ -43,9 +62,9 @@ fun CartScreen(navController: NavController){
                     modifier = Modifier.fillMaxWidth()
                         .padding(vertical = 8.dp, horizontal = 16.dp),
                     onClick = {
-
                         // Navigates to checkout screen
-                        navController.navigate(Routes.CHECKOUT_SCREEN)
+                        sharedViewModel.addListOfProduct(productList)
+                        navController.navigate(RoutesAdmin.CheckOutScreen)
 
                     }) {
                     Text(text = "Checkout")
@@ -70,7 +89,6 @@ fun CartScreen(navController: NavController){
 
                 items(cartList){
                     EachCartItem(cartProduct = it )
-
                 }
             }
 

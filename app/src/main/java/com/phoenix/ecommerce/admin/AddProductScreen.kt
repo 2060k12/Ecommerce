@@ -7,6 +7,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,6 +20,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.DropdownMenu
@@ -69,7 +71,7 @@ fun AddProductScreen(navController: NavController){
         mutableStateOf<Uri?>(null)
     }
     //  Launch our gallery to pick images
-    val launch =galleryLauncher(){
+    val launch =galleryLauncher {
         imageLink = it
     }
     // Name of the product
@@ -206,13 +208,23 @@ fun AddProductScreen(navController: NavController){
                     })
 
 
+                val dropDownButtonText = remember {
+                    mutableStateOf("Select Categories")
+                }
                 OutlinedButton(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
                     shape = RoundedCornerShape(5.dp),
                     onClick = { dropDownState = true }) {
-                    Text(text = "Select Categories")
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween) {
+                        Text(
+                            text = dropDownButtonText.value)
+                        Icon(imageVector = Icons.Default.KeyboardArrowDown, contentDescription = "Down")
+                    }
+
                     DropdownMenu(
                         modifier = Modifier
                             .padding(horizontal = 50.dp),
@@ -220,21 +232,24 @@ fun AddProductScreen(navController: NavController){
                         // Drop down menu item "Computer"
                         DropdownMenuItem(text = { Text(text = "Computer")},
                             onClick = {
-                            productCategory = "computer"
-                            dropDownState = false
+                                dropDownButtonText.value = "Category: Computer"
+                                productCategory = "computer"
+                                dropDownState = false
                         })
                         // Drop down menu item "Mobile"
                         DropdownMenuItem(text = { Text(text = "Mobile Phones")},
                             onClick = {
-                            productCategory = "mobile"
-                            dropDownState = false
+                                dropDownButtonText.value = "Category: Mobile"
+                                productCategory = "mobile"
+                                dropDownState = false
 
                         })
                         // Drop down menu item "Watch"
                         DropdownMenuItem(text = { Text(text = "Watches")},
                             onClick = {
-                            productCategory = "watch"
-                            dropDownState = false
+                                dropDownButtonText.value = "Category: Watch"
+                                productCategory = "watch"
+                                dropDownState = false
                         })
 
                     }

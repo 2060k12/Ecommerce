@@ -1,5 +1,7 @@
 package com.phoenix.ecommerce.navigation
 
+import com.phoenix.ecommerce.data.data.product.Products
+import com.phoenix.ecommerce.utils.SharedViewModel
 import kotlinx.serialization.Serializable
 
 object Routes {
@@ -19,13 +21,18 @@ object Routes {
 
 @Serializable
 sealed class RoutesAdmin{
+
+    // admin page dashboard
     @Serializable
     data object AdminDashBoard : RoutesAdmin()
 
+
+    // admin page Add products screen #1
     @Serializable
     data object AdminAddScreenOne : RoutesAdmin(
     )
 
+    // admin page Add products screen #2
     @Serializable
     data class AdminAddScreenTwo(
         val productName :String,
@@ -35,5 +42,14 @@ sealed class RoutesAdmin{
         val productCategory: String
 
     ) : RoutesAdmin()
+
+
+    @Serializable
+    data object CartScreen : RoutesAdmin()
+
+    @Serializable
+    data object CheckOutScreen : RoutesAdmin()
+
+
 
 }

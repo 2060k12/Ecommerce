@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.navigation.NavController
 import com.phoenix.ecommerce.navigation.Routes
+import com.phoenix.ecommerce.navigation.RoutesAdmin
 
 @Composable
 fun BottomNavBar(navController: NavController){
@@ -45,7 +46,7 @@ fun BottomNavBar(navController: NavController){
 
             // Cart Screen
             IconButton(onClick = {
-                navController.navigate(Routes.CART_SCREEN)
+                navController.navigate(RoutesAdmin.CartScreen)
 
             }) {
                 Icon(painter = rememberVectorPainter(image = Icons.Default.ShoppingCart), contentDescription = "Cart")

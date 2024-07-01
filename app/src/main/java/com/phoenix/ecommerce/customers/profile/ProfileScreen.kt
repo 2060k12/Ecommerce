@@ -23,9 +23,15 @@ import com.phoenix.ecommerce.utils.BottomNavBar
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(navController: NavController){
-    
-    // loginViewModel
+
+    // login view model
     val loginViewModel : LoginViewModel = viewModel()
+    // Profile view model
+    val viewModel : ProfileViewModel = viewModel()
+
+    val profile by lazy {   viewModel.currentUsersProfile}
+    viewModel.getCurrentUserProfile()
+
     
     val context = LocalContext.current
     Scaffold(
@@ -47,13 +53,13 @@ fun ProfileScreen(navController: NavController){
             Column(
                 modifier = Modifier.verticalScroll(rememberScrollState())
             ) {
-                ProfileUserName(){
+                ProfileUserName(profile.value) {
                     Toast.makeText(context, "Profile Clicked", Toast.LENGTH_SHORT).show()
                 }
 
-                ProfileGeneral()
+                ProfileGeneral(profile.value)
                 ProfileNotification()
-                SignOutFeature(){
+                SignOutFeature {
                     loginViewModel.signOut()
                     navController.navigate(Routes.LOGIN_SCREEN){
                         popUpTo(Routes.LOGIN_SCREEN){

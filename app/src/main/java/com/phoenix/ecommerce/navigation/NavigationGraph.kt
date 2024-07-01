@@ -31,8 +31,11 @@ import kotlinx.serialization.Serializable
 fun NavigationGraph(navHostController: NavHostController, startDestination : String){
 
     val sharedViewModel : SharedViewModel = viewModel()
-    // TODO: change to start destination 
-    NavHost(navController = navHostController, startDestination = RoutesAdmin.AdminAddScreenOne /* startDestination*/ ) {
+    // TODO: change to start destination
+
+//    NavHost(navController = navHostController, startDestination = startDestination ) {
+
+    NavHost(navController = navHostController, startDestination = RoutesAdmin.AdminAddScreenOne ) {
 
         // Home Screen
         composable(Routes.HOME_SCREEN){
@@ -44,17 +47,17 @@ fun NavigationGraph(navHostController: NavHostController, startDestination : Str
             LoginScreen(navHostController)
         }
 
-        // Cart Screen
-        composable(Routes.CART_SCREEN ) {
-            CartScreen(navHostController)
-        }
+
 
         // Product Screen -> Single product detail view
-        composable(Routes.PRODUCT_SCREEN + "/{productId}") {
+        composable(Routes.PRODUCT_SCREEN + "/{productId}/{category}") {
                 backStackEntry->
                 val productId =backStackEntry.arguments?.getString("productId")
+                val category =backStackEntry.arguments?.getString("category")
             if (productId != null) {
-                ProductsScreen(navController =  navHostController, productId = productId )
+                if (category != null) {
+                    ProductsScreen(navController =  navHostController, productId = productId, category )
+                }
             }
 
         }
@@ -69,9 +72,14 @@ fun NavigationGraph(navHostController: NavHostController, startDestination : Str
             ProfileScreen(navHostController)
         }
 
+        // Cart Screen
+        composable<RoutesAdmin.CartScreen> {
+            CartScreen(navHostController, sharedViewModel)
+        }
+
         // CHeckOut Screen
-        composable(Routes.CHECKOUT_SCREEN){
-            CheckOutScreen()
+        composable<RoutesAdmin.CheckOutScreen>{
+            CheckOutScreen(sharedViewModel)
         }
 
         // SIGNUP SCREEN

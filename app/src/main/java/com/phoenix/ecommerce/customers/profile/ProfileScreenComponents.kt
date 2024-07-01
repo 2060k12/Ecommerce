@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -36,21 +37,23 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.phoenix.ecommerce.R
+import com.phoenix.ecommerce.data.data.profile.Profile
 
 
 @Composable
-fun ProfileUserName(onClick: () -> Unit){
+fun ProfileUserName(profile : Profile, onClick: () -> Unit){
     Card(modifier = Modifier
-        .clickable {
-            onClick()
-        }
         .fillMaxWidth()
         .height(120.dp)
         .padding(16.dp))
     {
         Row(modifier = Modifier
-            .fillMaxWidth()
+            .clickable {
+                onClick()
+            }
+            .fillMaxSize()
             .padding(8.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Absolute.SpaceBetween
@@ -60,20 +63,23 @@ fun ProfileUserName(onClick: () -> Unit){
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Absolute.SpaceBetween
             ){
-                Image(
+
+
+                AsyncImage(
                     modifier = Modifier
-                        .size(70.dp)
-                        .clip(CircleShape),
+                        .padding(start = 8.dp)
+                        .size(60.dp)
+                        .clip(RoundedCornerShape(10.dp)),
                     contentScale = ContentScale.Crop,
-                    painter = painterResource(id = R.drawable.ic_launcher_background),
-                    contentDescription = "Profile Image")
+                    model = profile.profileImage , contentDescription = "Profile Image")
+
 
                 Spacer(modifier = Modifier.width(20.dp))
 
                 Text(
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 28.sp,
-                    text = "Pranish")
+                    text =profile.name)
             }
 
 
@@ -87,10 +93,8 @@ fun ProfileUserName(onClick: () -> Unit){
     }
 }
 
-@Preview(showBackground = true
-)
 @Composable
-fun ProfileGeneral(){
+fun ProfileGeneral(profile : Profile){
     Card(modifier = Modifier
         .fillMaxWidth()
         .padding(16.dp)
@@ -100,13 +104,10 @@ fun ProfileGeneral(){
         Column(
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            Text(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+            Text(modifier = Modifier.padding(top =  16.dp, start = 16.dp),
                 fontWeight = FontWeight.Bold,
                 fontSize = 24.sp,
                 text = "General")
-
-
-
 
 
             Card(modifier = Modifier
@@ -118,7 +119,7 @@ fun ProfileGeneral(){
                     Icon(modifier = Modifier.size(30.dp),
                         imageVector = Icons.Default.Email, contentDescription = "Profile")
                     Spacer(modifier = Modifier.width(16.dp))
-                    Text(text = "iampranish@Outlook.com")
+                    Text(text = profile.email)
                 }
             }
             Card(modifier = Modifier
@@ -130,7 +131,7 @@ fun ProfileGeneral(){
                     Icon(modifier = Modifier.size(30.dp),
                         imageVector = Icons.Default.Phone, contentDescription = "Profile")
                     Spacer(modifier = Modifier.width(16.dp))
-                    Text(text = "04-123-456-78")
+                    Text(text = profile.phone)
                 }
             }
             Card(modifier = Modifier
@@ -142,7 +143,7 @@ fun ProfileGeneral(){
                     Icon(modifier = Modifier.size(30.dp),
                         imageVector = Icons.Default.LocationOn, contentDescription = "Profile")
                     Spacer(modifier = Modifier.width(16.dp))
-                    Text(text = "20 Albert parade, Ashfield 2131")
+                    Text(text = profile.address)
                 }
             }
         }

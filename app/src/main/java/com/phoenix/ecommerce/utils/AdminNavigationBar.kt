@@ -11,9 +11,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.navigation.NavController
 import com.phoenix.ecommerce.navigation.Routes
+import com.phoenix.ecommerce.navigation.RoutesAdmin
 
 @Composable
 fun AdminNavigationBar(navController: NavController) {
+
+
     NavigationBar {
         // state of current screen
         val currentScreenDashboard = remember {
@@ -34,7 +37,7 @@ fun AdminNavigationBar(navController: NavController) {
             , onClick = {
                 currentScreenDashboard.value = false
                 // navigates to Admin Add new product
-                navController.navigate(Routes.ADMIN_ADD)
+                navController.navigate(RoutesAdmin.AdminAddScreenOne)
 
 
             }, icon = {
