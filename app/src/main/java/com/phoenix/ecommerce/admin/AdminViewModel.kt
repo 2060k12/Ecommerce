@@ -11,5 +11,7 @@ class AdminViewModel: ViewModel() {
 
     fun addNewProduct(products: Products){
         repository.addNewProduct(products)
+
+        // TODO: Add firestorage for image
     }
 }

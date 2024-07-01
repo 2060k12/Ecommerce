@@ -9,9 +9,9 @@ data class Products(
     val productName :String,
     var productId: String,
     val productCost : Int,
-    val productIconUrl : String,
+    var productIconUrl : String,
     val productInfo : String,
-    val productColor : String,
-    val productSpecs : String,
+    val productColor : List<String>,
+    val productSpecs : List<String>,
 )
 

@@ -16,6 +16,7 @@ firebaseFirestore = "25.0.0"
 roomRuntime = "2.6.1"
 runtimeLivedata = "1.6.8"
 serialization = "1.6.3"
+firebaseStorage = "21.0.0"
 
 
 [libraries]
@@ -43,6 +44,7 @@ firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore
 androidx-runtime-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata", version.ref = "runtimeLivedata" }
 
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization"}
+firebase-storage = { group = "com.google.firebase", name = "firebase-storage", version.ref = "firebaseStorage" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
