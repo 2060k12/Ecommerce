@@ -16,6 +16,7 @@ class AdminViewModel: ViewModel() {
     // livedata
     val listOfReceivedOrder : LiveData<ArrayList<AdminReceivedOrder>> get() = repository.listOfReceivedOrder
     val completedOrdersList : LiveData<ArrayList<AdminReceivedOrder>> get() = repository.completedOrdersList
+    val processingOrdersList : LiveData<ArrayList<AdminReceivedOrder>> get() = repository.processingOrdersList
 
 
 

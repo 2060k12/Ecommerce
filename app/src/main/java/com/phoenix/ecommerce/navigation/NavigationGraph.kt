@@ -5,10 +5,8 @@ import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.navArgument
 import androidx.navigation.toRoute
 import com.phoenix.ecommerce.admin.AddProductScreen
 import com.phoenix.ecommerce.admin.AddProductSecondScreen
@@ -16,14 +14,12 @@ import com.phoenix.ecommerce.admin.AdminScreen
 import com.phoenix.ecommerce.customers.cart.CartScreen
 import com.phoenix.ecommerce.customers.checkout.CheckOutScreen
 import com.phoenix.ecommerce.customers.homepage.HomeScreen
-import com.phoenix.ecommerce.login.LoginScreen
-import com.phoenix.ecommerce.login.SignUpScreen
 import com.phoenix.ecommerce.customers.products.ProductsScreen
 import com.phoenix.ecommerce.customers.profile.ProfileScreen
 import com.phoenix.ecommerce.customers.search.SearchScreen
-import com.phoenix.ecommerce.data.data.product.Products
+import com.phoenix.ecommerce.login.LoginScreen
+import com.phoenix.ecommerce.login.SignUpScreen
 import com.phoenix.ecommerce.utils.SharedViewModel
-import kotlinx.serialization.Serializable
 
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
@@ -115,7 +111,7 @@ fun NavigationGraph(navHostController: NavHostController, startDestination : Str
                 productCategory = customValue.productCategory,
                 imageLink = customValue.imageLink,
                 productInfo = customValue.productInfo
-                )
+            )
         }
         
 

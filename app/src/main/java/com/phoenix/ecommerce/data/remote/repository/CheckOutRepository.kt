@@ -17,31 +17,53 @@ class CheckOutRepository {
     private val db = Firebase.firestore
     private val auth = Firebase.auth
 
+    fun getCurrentUserDetail(email: String, callback: (name: String, phone: String) -> Unit){
+        try {
+
+            db.collection("users")
+                .document(auth.currentUser?.email.toString())
+                .get()
+                .addOnSuccessListener {
+                    callback(it.get("name").toString(), it.get("phone").toString())
+                }
+        }
+        catch (e: Exception){
+            Log.e("Error", e.message.toString())
+
+        }
+
+    }
+
 
     fun checkOut(listOfCartProducts: List<Products>, address: String, callBack : (state : Boolean) -> Unit) {
 
         val timestamp = Timestamp.now()
 
-        for (products in listOfCartProducts) {
-            val deliveryInstruction = hashMapOf(
-                "deliverTo" to auth.currentUser.toString(),
-                "orderPlacedOn" to timestamp,
-                "deliveryAddress" to address,
-                "products" to products,
-                "status" to "new"
-            )
-           db.collection("orders")
-                .document()
-                .set(deliveryInstruction)
-               .addOnCompleteListener(){
-                    callBack(true)
-               }
-               .addOnFailureListener(){
-                   Log.e("Error", "error Checking out")
-                   callBack(false)
-               }
+        getCurrentUserDetail(auth.currentUser?.email.toString()) {
+
+            name, phone ->
+            for (products in listOfCartProducts) {
+                val deliveryInstruction = hashMapOf(
+                    "deliverTo" to name,
+                    "contactNumber" to phone,
+                    "orderPlacedOn" to timestamp,
+                    "deliveryAddress" to address,
+                    "products" to products,
+                    "status" to "new"
+                )
+                db.collection("orders")
+                    .document()
+                    .set(deliveryInstruction)
+                    .addOnCompleteListener() {
+                        callBack(true)
+                    }
+                    .addOnFailureListener() {
+                        Log.e("Error", "error Checking out")
+                        callBack(false)
+                    }
 
 
+            }
         }
     }
 }

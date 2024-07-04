@@ -25,13 +25,17 @@ class AdminRepository {
     private val storage = FirebaseStorage.getInstance()
     private val storageRef = storage.reference
 
-    // liveData for Orders
+    // liveData for new orders
     private val _listOfReceivedOrders = MutableLiveData<ArrayList<AdminReceivedOrder>>()
     val listOfReceivedOrder : LiveData<ArrayList<AdminReceivedOrder>> get() = _listOfReceivedOrders
 
-    // liveData for Orders
+    // liveData for completed orders
     private val _completedOrdersList = MutableLiveData<ArrayList<AdminReceivedOrder>>()
     val completedOrdersList : LiveData<ArrayList<AdminReceivedOrder>> get() = _completedOrdersList
+
+    // liveData for processing
+    private val _processingOrdersList = MutableLiveData<ArrayList<AdminReceivedOrder>>()
+    val processingOrdersList : LiveData<ArrayList<AdminReceivedOrder>> get() = _processingOrdersList
 
     // add new product to database
     fun addNewProduct(products: Products){
@@ -68,25 +72,32 @@ class AdminRepository {
 
     }
 
+    // TODO: Fix processing  
     // fun to get list of all new orders
     suspend fun getAllOrders(){
         try{
             val tempListNew = ArrayList<AdminReceivedOrder>()
             val tempListCompleted = ArrayList<AdminReceivedOrder>()
+            val tempProcessing = ArrayList<AdminReceivedOrder>()
         val orders =db.collection("orders")
             .get()
             .await()
             for(order in orders){
                 val temp = order.toObject<AdminReceivedOrder>()
-                if(temp.status.lowercase() == "new" ) {
+                if(temp.status.lowercase().trim() == "new" ) {
                     tempListNew.add(temp)
                 }
-                else{
+
+                else if(temp.status.lowercase().trim() == "done"){
                     tempListCompleted.add(temp)
+                }
+                else {
+                    tempProcessing.add(temp)
                 }
             }
             _listOfReceivedOrders.value = tempListNew
             _completedOrdersList.value = tempListCompleted
+            _processingOrdersList.value = tempListCompleted
         }
         catch (e : Exception){
             Log.e("Error", "Error getting all orders + ${e.message.toString()}")

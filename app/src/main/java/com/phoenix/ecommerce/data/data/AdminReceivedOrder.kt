@@ -9,6 +9,7 @@ data class AdminReceivedOrder(
     val orderPlacedOn :Timestamp,
     val products : Products,
     val status: String,
+    val contactNumber : String
 ) {
-    constructor(): this("","",Timestamp.now(),Products(), "")
+    constructor(): this("","",Timestamp.now(),Products(), "", "")
 }
