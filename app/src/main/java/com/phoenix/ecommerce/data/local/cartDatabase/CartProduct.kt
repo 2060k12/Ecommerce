@@ -11,5 +11,8 @@ data class CartProduct(
     @ColumnInfo(name = "product_cost") val productCost : Int,
     @ColumnInfo(name = "product_icon_url") val productIconUrl : String,
     @ColumnInfo(name = "product_info")val productInfo : String?,
-    @ColumnInfo(name = "item_count") var productCount : Int?
-)
+    @ColumnInfo(name = "item_count") var productCount : Int?,
+    @ColumnInfo(name = "item_color")val productColor : String,
+    @ColumnInfo(name = "item_spec")val productSpec : String,
+    @ColumnInfo(name = "item_category")val productCategory : String,
+    )

@@ -1,11 +1,14 @@
 package com.phoenix.ecommerce.customers.homepage
 
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -26,8 +29,13 @@ import com.phoenix.ecommerce.utils.BottomNavBar
 fun HomeScreen(navController: NavController){
 
     val viewModel = HomeScreenViewModel()
-    viewModel.getAllProducts()
-    val productList = viewModel.productList.observeAsState(initial = ArrayList()).value
+    viewModel.getAllComputers()
+    viewModel.getAllMobiles()
+    viewModel.getAllWatches()
+
+    val computerList = viewModel.computerList.observeAsState(initial = ArrayList()).value
+    val mobileList = viewModel.mobileList.observeAsState(initial = ArrayList()).value
+    val watchList = viewModel.watchList.observeAsState(initial = ArrayList()).value
 
     Surface(modifier = Modifier.fillMaxSize()) {
         
@@ -51,8 +59,10 @@ fun HomeScreen(navController: NavController){
                 .fillMaxSize()
                 ) {
                 Column(
-                    modifier = Modifier.fillMaxSize()
 
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .verticalScroll(rememberScrollState()),
                 )
                 {
                      OfferBanner()
@@ -62,7 +72,7 @@ fun HomeScreen(navController: NavController){
                         modifier = Modifier.padding(horizontal = 8.dp),
                         fontWeight = FontWeight.Bold,
                         fontSize = 28.sp,
-                        text = "Guitars")
+                        text = "Computers")
 
 
                     LazyRow(
@@ -72,9 +82,46 @@ fun HomeScreen(navController: NavController){
                             .padding(16.dp)) {
 
 
-                            items(productList){
+                            items(computerList){
                                 EachProducts(products = it , navController)
                             }
+
+                    }
+                    Text(
+                        modifier = Modifier.padding(horizontal = 8.dp),
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 28.sp,
+                        text = "Mobiles")
+
+                    LazyRow(
+                        horizontalArrangement = Arrangement.spacedBy(10.dp),
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(16.dp)) {
+
+
+                        items(mobileList){
+                            EachProducts(products = it , navController)
+                        }
+
+                    }
+
+                    Text(
+                        modifier = Modifier.padding(horizontal = 8.dp),
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 28.sp,
+                        text = "Watches")
+
+                    LazyRow(
+                        horizontalArrangement = Arrangement.spacedBy(10.dp),
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(16.dp)) {
+
+
+                        items(watchList){
+                            EachProducts(products = it , navController)
+                        }
 
                     }
 

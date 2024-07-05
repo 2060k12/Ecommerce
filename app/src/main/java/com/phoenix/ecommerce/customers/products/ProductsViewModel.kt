@@ -12,9 +12,9 @@ class ProductsViewModel: ViewModel() {
 
     val clickedProduct get() = productsRepository.clickedProduct
 
-    fun getProduct(productId : String ){
+    fun getProduct(productId : String, category: String ){
         viewModelScope.launch {
-            productsRepository.getProduct(productId)
+            productsRepository.getProduct(productId, category)
         }
     }
 

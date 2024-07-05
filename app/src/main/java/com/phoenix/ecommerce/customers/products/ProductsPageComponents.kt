@@ -1,14 +1,20 @@
 package com.phoenix.ecommerce.customers.products
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
@@ -86,6 +92,44 @@ fun ProductsCustomerReview(){
 
 }
 
+
+@Composable
+fun ProductsChoseOptions(product: List<String>, callback: (selectedItem : String)-> Unit){
+
+    Column (modifier = Modifier
+        .padding(horizontal = 16.dp)){
+        Text(
+            fontWeight = FontWeight.Bold,
+            text = "Color Options: ")
+
+        val selected = remember {
+            mutableStateOf("")
+        }
+
+        Row (horizontalArrangement = Arrangement.spacedBy(10.dp)){
+
+            if (product != null) {
+                for (product in product){
+                    if(selected.value.lowercase() == product.lowercase()){
+                        FilterChip(selected = true, onClick = {
+                            selected.value = ""
+                        },
+                            label = { Text(text = product)})
+                    }
+                    else{
+                        FilterChip(selected = false,
+                            onClick = { selected.value = product },
+                            label = { Text(text = product)})
+                    }
+
+                }
+            }
+
+            callback(selected.value)
+
+        }
+    }
+}
 
 
 

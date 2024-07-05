@@ -47,4 +47,10 @@ class CartViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    fun clear(){
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.clear()
+        }
+    }
+
 }

@@ -9,22 +9,26 @@ class CartRepository(private val cartDao: CartDao) {
     val getAllCartProduct: LiveData<List<CartProduct>> = cartDao.getALl()
 
 
-    suspend fun addToCart(cartProduct: CartProduct){
+    fun addToCart(cartProduct: CartProduct){
         cartDao.insert(cartProduct )
     }
 
-    suspend fun updateCart(cartProduct: CartProduct){
+    fun updateCart(cartProduct: CartProduct){
         cartDao.update(cartProduct)
     }
 
 
 
-    suspend fun removeFromCart(cartProduct: CartProduct){
+    fun removeFromCart(cartProduct: CartProduct){
         cartDao.delete(cartProduct)
     }
 
-    suspend fun getItemByID (productId : String) : CartProduct? {
+    fun getItemByID (productId : String) : CartProduct? {
         return cartDao.getItemByID(productId)
+    }
+
+    suspend fun clear(){
+        cartDao.clear()
     }
 
 }

@@ -27,6 +27,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -46,7 +48,7 @@ import com.phoenix.ecommerce.utils.OutlinedButton
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
-fun ProductsScreen(navController: NavController, productId: String){
+fun ProductsScreen(navController: NavController, productId: String, category: String){
 val context = LocalContext.current
 
     // initializing viewmodel
@@ -55,9 +57,16 @@ val context = LocalContext.current
     // cart view model
     val cartViewModel : CartViewModel = viewModel()
 
-    viewModel.getProduct(productId)
+    viewModel.getProduct(productId, category)
     val product : Products? = viewModel.clickedProduct.value
 
+    val selectedColor = remember {
+        mutableStateOf("")
+    }
+
+    val selectedSpecs = remember {
+        mutableStateOf("")
+    }
 
 Scaffold (
 
@@ -84,6 +93,8 @@ Scaffold (
                 cartViewModel.getItemByID(productId){
                     cartProduct ->
 
+                    // TODO: fix the cart page
+                    // TODO: same products with different specs or color are alos getting merged into a same one
                     if(cartProduct == null){
                         val tempCart = product?.let {
                             CartProduct(
@@ -92,8 +103,12 @@ Scaffold (
                                 productCost = product.productCost,
                                 productInfo = product.productInfo,
                                 productIconUrl = product.productIconUrl,
-                                productCount = 1
-                            )
+                                productCount = 1,
+                                productColor = selectedColor.value ,
+                                productSpec = selectedSpecs.value,
+                                productCategory = product.productCategory,
+
+                                )
                         }
                         if (tempCart != null) {
                             cartViewModel.addToCart(tempCart)
@@ -105,7 +120,6 @@ Scaffold (
                         tempCart.productCount = tempCart.productCount?.plus(1)
                         cartViewModel.updateCart(tempCart)
                     }
-
                 }
 
 
@@ -177,6 +191,25 @@ Scaffold (
 
                 }
 
+
+
+                // if the productColor is empty this item wont be shown in the lazy column
+                if(product?.productColor?.isNotEmpty() == true)
+                item {
+                    ProductsChoseOptions(product.productColor){
+                        selectedColor.value = it
+                    }
+
+                }
+                // if the productColor is empty this item wont be shown in the lazy column
+                if(product?.productSpecs?.isNotEmpty() == true)
+                    item {
+                        ProductsChoseOptions(product.productSpecs){
+                            selectedSpecs.value = it
+                        }
+
+                    }
+
                 item {
                     if (product != null) {
                         ProductsInfo(product)
@@ -197,5 +230,5 @@ Scaffold (
 @Preview(showSystemUi = true)
 @Composable
 fun ProductScreenView(){
-    ProductsScreen(navController = rememberNavController(), productId = "")
+    ProductsScreen(navController = rememberNavController(), productId = "", "")
 }

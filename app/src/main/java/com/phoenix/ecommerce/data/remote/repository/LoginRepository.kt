@@ -14,7 +14,6 @@ class LoginRepository {
     private val auth = Firebase.auth
     private val db = Firebase.firestore
 
-
     fun loginUser(email: String, password: String, callback : (Boolean)-> Unit) {
         try {
             auth.signInWithEmailAndPassword(email, password)
@@ -40,11 +39,12 @@ class LoginRepository {
             "name" to name,
             "phone" to phone,
             "email" to email,
-            "address" to address
+            "address" to address,
+            "profileImage" to "https://cdn.pixabay.com/photo/2016/03/31/19/56/avatar-1295397_1280.png"
         )
         try {
         auth.createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener(){
+            .addOnCompleteListener {
                 task->
                 if(task.isSuccessful){
                     db.collection("users")

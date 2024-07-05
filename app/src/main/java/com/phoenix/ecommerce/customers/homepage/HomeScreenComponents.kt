@@ -60,7 +60,7 @@ fun EachProducts(products: Products, navController: NavController){
         Column(
             modifier = Modifier.clickable {
                 sharedViewModel.addProduct(products)
-                navController.navigate(Routes.PRODUCT_SCREEN +"/${products.productId}")
+                navController.navigate(Routes.PRODUCT_SCREEN +"/${products.productId}/${products.productCategory}")
             },
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
