@@ -65,7 +65,6 @@ fun AddProductSecondScreen(navController: NavController, productName: String, pr
     // initializing the viewmodel
     val viewModel : AdminViewModel = viewModel()
 
-
     // initially the color picker dialogue is hidden
     var colorDialogPickerState by remember {
         mutableStateOf(false)

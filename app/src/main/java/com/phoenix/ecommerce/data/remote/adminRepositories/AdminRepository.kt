@@ -84,20 +84,15 @@ class AdminRepository {
             .await()
             for(order in orders){
                 val temp = order.toObject<AdminReceivedOrder>()
-                if(temp.status.lowercase().trim() == "new" ) {
-                    tempListNew.add(temp)
-                }
-
-                else if(temp.status.lowercase().trim() == "done"){
-                    tempListCompleted.add(temp)
-                }
-                else {
-                    tempProcessing.add(temp)
+                when(temp.status.lowercase().trim()){
+                    "new" -> tempListNew.add(temp)
+                    "processing" -> tempProcessing.add(temp)
+                    "done" -> tempListCompleted.add(temp)
                 }
             }
             _listOfReceivedOrders.value = tempListNew
-            _completedOrdersList.value = tempListCompleted
             _processingOrdersList.value = tempListCompleted
+            _completedOrdersList.value = tempListCompleted
         }
         catch (e : Exception){
             Log.e("Error", "Error getting all orders + ${e.message.toString()}")
