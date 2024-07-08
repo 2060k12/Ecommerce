@@ -21,7 +21,9 @@ import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Phone
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
@@ -37,9 +39,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.phoenix.ecommerce.R
 import com.phoenix.ecommerce.data.data.profile.Profile
+import com.phoenix.ecommerce.navigation.Routes
 
 
 @Composable
@@ -94,7 +98,7 @@ fun ProfileUserName(profile : Profile, onClick: () -> Unit){
 }
 
 @Composable
-fun ProfileGeneral(profile : Profile){
+fun ProfileGeneral(profile : Profile, navController: NavController){
     Card(modifier = Modifier
         .fillMaxWidth()
         .padding(16.dp)
@@ -112,21 +116,35 @@ fun ProfileGeneral(profile : Profile){
 
             Card(modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 8.dp)) {
+                .padding( vertical = 4.dp)) {
                 Row(
-                    modifier = Modifier.padding(vertical = 4.dp),
+
+                    modifier = Modifier.padding(horizontal = 16.dp,
+                        vertical = 4.dp)
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically) {
+
+                    Row {
+                        Icon(
+                            modifier = Modifier.size(30.dp),
+                            imageVector = Icons.Default.Email, contentDescription = "Profile"
+                        )
+                        Spacer(modifier = Modifier.width(16.dp))
+                        Text(text = profile.email)
+                    }
                     Icon(modifier = Modifier.size(30.dp),
-                        imageVector = Icons.Default.Email, contentDescription = "Profile")
-                    Spacer(modifier = Modifier.width(16.dp))
-                    Text(text = profile.email)
+                        imageVector = Icons.Default.Lock, contentDescription = "Profile")
                 }
             }
+
+
             Card(modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 8.dp)) {
+                .padding( vertical = 4.dp)) {
                 Row(
-                    modifier = Modifier.padding(vertical = 4.dp),
+                    modifier = Modifier.padding(horizontal = 16.dp,
+                        vertical = 4.dp),
                     verticalAlignment = Alignment.CenterVertically) {
                     Icon(modifier = Modifier.size(30.dp),
                         imageVector = Icons.Default.Phone, contentDescription = "Profile")
@@ -134,16 +152,40 @@ fun ProfileGeneral(profile : Profile){
                     Text(text = profile.phone)
                 }
             }
+
+
+
             Card(modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 8.dp)) {
+                .padding( vertical = 8.dp)) {
+
                 Row(
-                    modifier = Modifier.padding(vertical = 4.dp),
+                    modifier = Modifier.padding(
+                        horizontal = 16.dp,
+                        vertical = 4.dp),
                     verticalAlignment = Alignment.CenterVertically) {
                     Icon(modifier = Modifier.size(30.dp),
                         imageVector = Icons.Default.LocationOn, contentDescription = "Profile")
                     Spacer(modifier = Modifier.width(16.dp))
                     Text(text = profile.address)
+                }
+            }
+
+            Card(
+                onClick = {
+                    navController.navigate(Routes.ORDERS_HISTORY_SCREEN)
+                },
+                modifier = Modifier
+                .fillMaxWidth()) {
+                Row(
+                    modifier = Modifier.padding(
+                        horizontal = 16.dp,
+                        vertical = 10.dp),
+                    verticalAlignment = Alignment.CenterVertically) {
+                    Icon(modifier = Modifier.size(30.dp),
+                        imageVector = Icons.Default.ShoppingCart, contentDescription = "Profile")
+                    Spacer(modifier = Modifier.width(16.dp))
+                    Text(text = "Order History")
                 }
             }
         }
@@ -181,6 +223,7 @@ fun ProfileNotification(){
 
                 }
             }
+
 
             Card(
                 modifier = Modifier

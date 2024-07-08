@@ -46,11 +46,12 @@ import com.phoenix.ecommerce.navigation.Routes
 import com.phoenix.ecommerce.navigation.RoutesAdmin
 import com.phoenix.ecommerce.utils.FilledButton
 import com.phoenix.ecommerce.utils.OutlinedButton
+import com.phoenix.ecommerce.utils.SharedViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
-fun ProductsScreen(navController: NavController, productId: String, category: String){
+fun ProductsScreen(sharedViewModel: SharedViewModel, navController: NavController, productId: String, category: String){
 val context = LocalContext.current
 
     // initializing viewmodel
@@ -218,13 +219,21 @@ Scaffold (
                     }
                 }
 
+                item {
+                    if (product != null) {
+                        sharedViewModel.addProduct(product)
+                        ProductsCustomerReview(navController)
+                    }
+                }
 
-        }}
+
+
+            }}
 
     }
 )
 
-    ProductsCustomerReview()
+
 
 
 }
@@ -232,5 +241,5 @@ Scaffold (
 @Preview(showSystemUi = true)
 @Composable
 fun ProductScreenView(){
-    ProductsScreen(navController = rememberNavController(), productId = "", "")
+    ProductsScreen(sharedViewModel = SharedViewModel() ,navController = rememberNavController(), productId = "", "")
 }

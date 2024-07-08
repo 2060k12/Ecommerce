@@ -5,6 +5,9 @@ import com.phoenix.ecommerce.utils.SharedViewModel
 import kotlinx.serialization.Serializable
 
 object Routes {
+    const val PRODUCT_REVIEW_SCREEN = "PRODUCT_REVIEW_SCREEN"
+    const val ORDERS_HISTORY_SCREEN = "ORDERS_HISTORY_SCREEN"
+    const val EDIT_PROFILE_SCREEN = "EDIT_PROFILE_SCREEN"
     const val ADMIN_DASHBOARD= "ADMIN_DASHBOARD"
     const val ADMIN_ADD= "ADMIN_ADD"
     const val ADMIN_ADD_TWO= "ADMIN_ADD_TWO/{productName}/{productCost}/{productCategory}/{productInfo}/{imageLink}"

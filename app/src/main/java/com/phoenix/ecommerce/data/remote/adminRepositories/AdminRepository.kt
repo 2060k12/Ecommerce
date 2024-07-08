@@ -57,7 +57,8 @@ class AdminRepository {
                             downloadUrl = task.result
                             products.productIconUrl = downloadUrl.toString()
                             db.collection(products.productCategory)
-                                .add(products)
+                                .document(products.productId)
+                                .set(products)
                             Log.i("Url", downloadUrl.toString())
                         } else {
                             Log.i("Failed", "Failed to get download link")

@@ -10,11 +10,20 @@ class ProductsViewModel: ViewModel() {
     // Initializing products repository
     private val productsRepository = ProductsRepository()
 
+    // all ordered products by the current user
+    val orderedProductList get() = productsRepository.orderedProductList
+
     val clickedProduct get() = productsRepository.clickedProduct
 
     fun getProduct(productId : String, category: String ){
         viewModelScope.launch {
             productsRepository.getProduct(productId, category)
+        }
+    }
+
+    fun getALlOrderedList(){
+        viewModelScope.launch {
+            productsRepository.getALlOrderedProducts()
         }
     }
 
