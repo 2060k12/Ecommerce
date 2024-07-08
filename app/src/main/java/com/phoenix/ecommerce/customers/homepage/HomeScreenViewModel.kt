@@ -15,6 +15,8 @@ class HomeScreenViewModel: ViewModel() {
     val mobileList get() =  productRepository.mobileList
     val computerList get() =  productRepository.computerList
     val watchList get() =  productRepository.watchList
+    val productList get() =  productRepository.productList
+    val offerList get() =  productRepository.offerList
 
 
     // function to get allProducts from firestore database
@@ -46,6 +48,14 @@ class HomeScreenViewModel: ViewModel() {
     fun getAllWatches() {
         viewModelScope.launch {
             productRepository.getAllWatches()
+        }
+    }
+
+
+    fun getAllOffers(){
+        viewModelScope.launch {
+
+            productRepository.getAllOffers()
         }
     }
 

@@ -1,5 +1,6 @@
 package com.phoenix.ecommerce.customers.products
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,12 +23,30 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.google.android.play.integrity.internal.i
 import com.phoenix.ecommerce.data.data.product.Products
+import com.phoenix.ecommerce.navigation.Routes
 
 
 @Composable
-fun ProductImageView(products: Products){
+fun ProductImageView(products: Products, navController: NavController){
+
+    AsyncImage(
+        model = products.productIconUrl,
+        contentScale = ContentScale.Crop,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
+            .aspectRatio(16f / 9f)
+            .clip(RoundedCornerShape(20.dp)),
+        contentDescription = ""
+    )
+
+}
+@Composable
+fun ProductImageViewHomePage(products: Products, navController: NavController){
 
     AsyncImage(
         model = products.productIconUrl,
@@ -36,7 +56,9 @@ fun ProductImageView(products: Products){
             .padding(horizontal = 16.dp)
             .aspectRatio(16f / 9f)
             .clip(RoundedCornerShape(20.dp))
-        ,
+            . clickable {
+                navController.navigate(Routes.PRODUCT_SCREEN +"/${products.productId}/${products.productCategory}")
+        },
         contentDescription = ""
     )
 

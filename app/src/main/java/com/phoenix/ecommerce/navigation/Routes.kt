@@ -27,10 +27,18 @@ sealed class RoutesAdmin{
     data object AdminDashBoard : RoutesAdmin()
 
 
+    // admin edit screen
+    @Serializable
+    data object  AdminEditScreen : RoutesAdmin()
+
     // admin page Add products screen #1
     @Serializable
     data object AdminAddScreenOne : RoutesAdmin(
     )
+
+    // admin page Add products screen #1
+    @Serializable
+    data object AdminEditEachProductScreen : RoutesAdmin()
 
     // admin page Add products screen #2
     @Serializable
@@ -49,7 +57,5 @@ sealed class RoutesAdmin{
 
     @Serializable
     data object CheckOutScreen : RoutesAdmin()
-
-
 
 }

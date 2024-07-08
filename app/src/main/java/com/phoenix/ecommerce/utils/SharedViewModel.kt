@@ -12,18 +12,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 class SharedViewModel : ViewModel() {
 
-    var product by mutableStateOf<Products>(
-        Products(
-            "",
-            "",
-            "",
-            0,
-            "",
-            "",
-            listOf(String()),
-            listOf(String())
-        )
-    )
+    var product = Products()
         private set
 
     fun addProduct(newProduct: Products) {
@@ -37,4 +26,6 @@ class SharedViewModel : ViewModel() {
     fun addListOfProduct(newProduct: ArrayList<Products>){
         listOfProducts = newProduct
     }
+
+
 }

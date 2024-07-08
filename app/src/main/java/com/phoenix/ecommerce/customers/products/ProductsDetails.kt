@@ -42,6 +42,8 @@ import androidx.navigation.compose.rememberNavController
 import com.phoenix.ecommerce.customers.cart.CartViewModel
 import com.phoenix.ecommerce.data.data.product.Products
 import com.phoenix.ecommerce.data.local.cartDatabase.CartProduct
+import com.phoenix.ecommerce.navigation.Routes
+import com.phoenix.ecommerce.navigation.RoutesAdmin
 import com.phoenix.ecommerce.utils.FilledButton
 import com.phoenix.ecommerce.utils.OutlinedButton
 
@@ -126,8 +128,8 @@ Scaffold (
                 Toast.makeText(context, "Pressed Add Cart", Toast.LENGTH_SHORT).show()
 
             }
-            FilledButton("Buy Now"){
-                Toast.makeText(context, "Pressed Buy Now", Toast.LENGTH_SHORT).show()
+            FilledButton("View Cart"){
+                navController.navigate(RoutesAdmin.CartScreen)
             }
         }
     },
@@ -153,7 +155,7 @@ Scaffold (
                         ) { page ->
 
                             if (product != null) {
-                                ProductImageView(product)
+                                ProductImageView(product, navController)
                             }
                         }
                         Row(

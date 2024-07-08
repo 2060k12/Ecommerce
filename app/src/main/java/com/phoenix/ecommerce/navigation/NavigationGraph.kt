@@ -10,6 +10,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.phoenix.ecommerce.admin.AddProductScreen
 import com.phoenix.ecommerce.admin.AddProductSecondScreen
+import com.phoenix.ecommerce.admin.AdminEditEachProductScreen
+import com.phoenix.ecommerce.admin.AdminEditScreen
 import com.phoenix.ecommerce.admin.AdminScreen
 import com.phoenix.ecommerce.customers.cart.CartScreen
 import com.phoenix.ecommerce.customers.checkout.CheckOutScreen
@@ -29,7 +31,7 @@ fun NavigationGraph(navHostController: NavHostController, startDestination: Stri
     val sharedViewModel: SharedViewModel = viewModel()
     // TODO: change to start destination
 
-    NavHost(navController = navHostController, startDestination = startDestination) {
+     NavHost(navController = navHostController, startDestination = startDestination) {
 
 //    NavHost(navController = navHostController, startDestination = RoutesAdmin.AdminAddScreenOne ) {
 
@@ -93,6 +95,15 @@ fun NavigationGraph(navHostController: NavHostController, startDestination: Stri
         // Admin Dashboard
         composable(Routes.ADMIN_DASHBOARD) {
             AdminScreen(navHostController)
+        } // Admin Dashboard
+
+        composable<RoutesAdmin.AdminEditScreen> {
+            AdminEditScreen(navHostController, sharedViewModel)
+        }
+
+        composable<RoutesAdmin.AdminEditEachProductScreen> {
+            val passedArgument = it.toRoute<RoutesAdmin.AdminEditEachProductScreen>()
+            AdminEditEachProductScreen(products = sharedViewModel.product, navHostController )
         }
 
 

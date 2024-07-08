@@ -36,6 +36,9 @@ fun HomeScreen(navController: NavController){
     val computerList = viewModel.computerList.observeAsState(initial = ArrayList()).value
     val mobileList = viewModel.mobileList.observeAsState(initial = ArrayList()).value
     val watchList = viewModel.watchList.observeAsState(initial = ArrayList()).value
+    val offerList = viewModel.offerList.observeAsState(initial = ArrayList()).value
+
+    viewModel.getAllOffers()
 
     Surface(modifier = Modifier.fillMaxSize()) {
         
@@ -65,8 +68,7 @@ fun HomeScreen(navController: NavController){
                         .verticalScroll(rememberScrollState()),
                 )
                 {
-                     OfferBanner()
-
+                     OfferBanner(offerList, navController)
 
                     Text(
                         modifier = Modifier.padding(horizontal = 8.dp),
