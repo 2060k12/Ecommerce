@@ -10,11 +10,16 @@ import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.phoenix.ecommerce.admin.AddProductScreen
 import com.phoenix.ecommerce.admin.AddProductSecondScreen
+import com.phoenix.ecommerce.admin.AdminEditEachProductScreen
+import com.phoenix.ecommerce.admin.AdminEditScreen
 import com.phoenix.ecommerce.admin.AdminScreen
 import com.phoenix.ecommerce.customers.cart.CartScreen
 import com.phoenix.ecommerce.customers.checkout.CheckOutScreen
 import com.phoenix.ecommerce.customers.homepage.HomeScreen
+import com.phoenix.ecommerce.customers.products.ProductReviewScreen
 import com.phoenix.ecommerce.customers.products.ProductsScreen
+import com.phoenix.ecommerce.customers.profile.EditProfileScreen
+import com.phoenix.ecommerce.customers.profile.OrderHistoryScreen
 import com.phoenix.ecommerce.customers.profile.ProfileScreen
 import com.phoenix.ecommerce.customers.search.SearchScreen
 import com.phoenix.ecommerce.login.LoginScreen
@@ -30,8 +35,13 @@ fun NavigationGraph(navHostController: NavHostController, startDestination: Stri
     // TODO: change to start destination
 
     NavHost(navController = navHostController, startDestination = startDestination) {
-
 //    NavHost(navController = navHostController, startDestination = RoutesAdmin.AdminAddScreenOne ) {
+
+
+        // products review screen
+        composable(Routes.PRODUCT_REVIEW_SCREEN) {
+            ProductReviewScreen(navController = navHostController, sharedViewModel)
+        }
 
         // Home Screen
         composable(Routes.HOME_SCREEN) {
@@ -43,6 +53,11 @@ fun NavigationGraph(navHostController: NavHostController, startDestination: Stri
             LoginScreen(navHostController)
         }
 
+        // edit Profile Screen
+        composable(Routes.EDIT_PROFILE_SCREEN) {
+            EditProfileScreen(sharedViewModel)
+
+        }
 
         // Product Screen -> Single product detail view
         composable(Routes.PRODUCT_SCREEN + "/{productId}/{category}") { backStackEntry ->
@@ -51,6 +66,7 @@ fun NavigationGraph(navHostController: NavHostController, startDestination: Stri
             if (productId != null) {
                 if (category != null) {
                     ProductsScreen(
+                        sharedViewModel = sharedViewModel,
                         navController = navHostController,
                         productId = productId,
                         category
@@ -60,6 +76,12 @@ fun NavigationGraph(navHostController: NavHostController, startDestination: Stri
 
         }
 
+        // order history screen
+        composable(Routes.ORDERS_HISTORY_SCREEN) {
+            
+            OrderHistoryScreen(navController = navHostController)
+        }
+        
         // Search Screen
         composable(Routes.SEARCH_SCREEN) {
             SearchScreen(navHostController)
@@ -67,7 +89,7 @@ fun NavigationGraph(navHostController: NavHostController, startDestination: Stri
 
         // Profile Screen
         composable(Routes.PROFILE_SCREEN) {
-            ProfileScreen(navHostController)
+            ProfileScreen(navHostController, sharedViewModel)
         }
 
         // Cart Screen
@@ -93,6 +115,15 @@ fun NavigationGraph(navHostController: NavHostController, startDestination: Stri
         // Admin Dashboard
         composable(Routes.ADMIN_DASHBOARD) {
             AdminScreen(navHostController)
+        } // Admin Dashboard
+
+        composable<RoutesAdmin.AdminEditScreen> {
+            AdminEditScreen(navHostController, sharedViewModel)
+        }
+
+        composable<RoutesAdmin.AdminEditEachProductScreen> {
+            val passedArgument = it.toRoute<RoutesAdmin.AdminEditEachProductScreen>()
+            AdminEditEachProductScreen(products = sharedViewModel.product, navHostController )
         }
 
 

@@ -3,6 +3,7 @@ package com.phoenix.ecommerce.utils
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -42,6 +43,17 @@ fun AdminNavigationBar(navController: NavController) {
 
             }, icon = {
                 Icon(imageVector = Icons.Default.Create, contentDescription = "Add")
+            })
+
+
+        NavigationBarItem(selected = !currentScreenDashboard.value
+            , onClick = {
+                currentScreenDashboard.value = false
+                // navigates to Current products page
+                navController.navigate(RoutesAdmin.AdminEditScreen)
+
+            }, icon = {
+                Icon(imageVector = Icons.Default.Info, contentDescription = "Add")
             })
     }
 }

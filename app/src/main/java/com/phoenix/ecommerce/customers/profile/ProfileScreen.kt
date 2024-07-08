@@ -19,10 +19,11 @@ import androidx.navigation.compose.rememberNavController
 import com.phoenix.ecommerce.login.LoginViewModel
 import com.phoenix.ecommerce.navigation.Routes
 import com.phoenix.ecommerce.utils.BottomNavBar
+import com.phoenix.ecommerce.utils.SharedViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfileScreen(navController: NavController){
+fun ProfileScreen(navController: NavController, sharedViewModel: SharedViewModel){
 
     // login view model
     val loginViewModel : LoginViewModel = viewModel()
@@ -54,10 +55,11 @@ fun ProfileScreen(navController: NavController){
                 modifier = Modifier.verticalScroll(rememberScrollState())
             ) {
                 ProfileUserName(profile.value) {
-                    Toast.makeText(context, "Profile Clicked", Toast.LENGTH_SHORT).show()
+                    sharedViewModel.addProfileInfo(profile.value)
+                    navController.navigate(Routes.EDIT_PROFILE_SCREEN )
                 }
 
-                ProfileGeneral(profile.value)
+                ProfileGeneral(profile.value, navController)
                 ProfileNotification()
                 SignOutFeature {
                     loginViewModel.signOut()
@@ -76,10 +78,4 @@ fun ProfileScreen(navController: NavController){
         }
 
     }
-}
-
-@Composable
-fun ProfileScreenPreview(){
-
-    ProfileScreen(navController = rememberNavController())
 }

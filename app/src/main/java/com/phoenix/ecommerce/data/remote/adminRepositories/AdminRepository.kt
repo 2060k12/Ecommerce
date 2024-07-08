@@ -57,7 +57,8 @@ class AdminRepository {
                             downloadUrl = task.result
                             products.productIconUrl = downloadUrl.toString()
                             db.collection(products.productCategory)
-                                .add(products)
+                                .document(products.productId)
+                                .set(products)
                             Log.i("Url", downloadUrl.toString())
                         } else {
                             Log.i("Failed", "Failed to get download link")
@@ -91,7 +92,7 @@ class AdminRepository {
                 }
             }
             _listOfReceivedOrders.value = tempListNew
-            _processingOrdersList.value = tempListCompleted
+            _processingOrdersList.value = tempProcessing
             _completedOrdersList.value = tempListCompleted
         }
         catch (e : Exception){
@@ -99,6 +100,41 @@ class AdminRepository {
         }
 
     }
+
+
+    // add a product to spotlight
+    fun addProductToSpotlight(product: Products){
+        db.collection("offers")
+            .document(product.productId)
+            .set(product)
+    }
+
+
+    // function to set new orders status as processing
+    fun addProductsAsProcessing(products: AdminReceivedOrder){
+
+        db.collection("orders")
+            .document(products.orderId)
+            .update("status", "Processing" )
+            .addOnSuccessListener {
+            }
+    }
+
+    // function to set status of processing orders to completed
+    fun addProductAsCompleted(products: AdminReceivedOrder){
+        products.status = "Done"
+        db.collection("orders")
+            .document(products.orderId)
+            .update("status", "Done" )
+            .addOnSuccessListener {
+                db.collection("users")
+                    .document(products.email)
+                    .collection("completedOrders")
+                    .add(products)
+            }
+
+    }
+
 
 
 }

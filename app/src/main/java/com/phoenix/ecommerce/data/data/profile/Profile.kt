@@ -1,5 +1,8 @@
 package com.phoenix.ecommerce.data.data.profile
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class Profile(
     val profileImage: String,
     val name : String,

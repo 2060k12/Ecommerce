@@ -42,13 +42,16 @@ import androidx.navigation.compose.rememberNavController
 import com.phoenix.ecommerce.customers.cart.CartViewModel
 import com.phoenix.ecommerce.data.data.product.Products
 import com.phoenix.ecommerce.data.local.cartDatabase.CartProduct
+import com.phoenix.ecommerce.navigation.Routes
+import com.phoenix.ecommerce.navigation.RoutesAdmin
 import com.phoenix.ecommerce.utils.FilledButton
 import com.phoenix.ecommerce.utils.OutlinedButton
+import com.phoenix.ecommerce.utils.SharedViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
-fun ProductsScreen(navController: NavController, productId: String, category: String){
+fun ProductsScreen(sharedViewModel: SharedViewModel, navController: NavController, productId: String, category: String){
 val context = LocalContext.current
 
     // initializing viewmodel
@@ -126,8 +129,8 @@ Scaffold (
                 Toast.makeText(context, "Pressed Add Cart", Toast.LENGTH_SHORT).show()
 
             }
-            FilledButton("Buy Now"){
-                Toast.makeText(context, "Pressed Buy Now", Toast.LENGTH_SHORT).show()
+            FilledButton("View Cart"){
+                navController.navigate(RoutesAdmin.CartScreen)
             }
         }
     },
@@ -153,7 +156,7 @@ Scaffold (
                         ) { page ->
 
                             if (product != null) {
-                                ProductImageView(product)
+                                ProductImageView(product, navController)
                             }
                         }
                         Row(
@@ -216,13 +219,21 @@ Scaffold (
                     }
                 }
 
+                item {
+                    if (product != null) {
+                        sharedViewModel.addProduct(product)
+                        ProductsCustomerReview(navController)
+                    }
+                }
 
-        }}
+
+
+            }}
 
     }
 )
 
-    ProductsCustomerReview()
+
 
 
 }
@@ -230,5 +241,5 @@ Scaffold (
 @Preview(showSystemUi = true)
 @Composable
 fun ProductScreenView(){
-    ProductsScreen(navController = rememberNavController(), productId = "", "")
+    ProductsScreen(sharedViewModel = SharedViewModel() ,navController = rememberNavController(), productId = "", "")
 }

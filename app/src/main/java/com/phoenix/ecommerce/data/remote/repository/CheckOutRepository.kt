@@ -10,6 +10,7 @@ import com.phoenix.ecommerce.customers.cart.CartViewModel
 import com.phoenix.ecommerce.data.data.product.Products
 import com.phoenix.ecommerce.data.local.cartDatabase.MyCartDatabase
 import com.phoenix.ecommerce.data.local.repository.CartRepository
+import java.util.UUID
 
 class CheckOutRepository {
 
@@ -43,16 +44,19 @@ class CheckOutRepository {
 
             name, phone ->
             for (products in listOfCartProducts) {
+                val randomId = UUID.randomUUID().toString()
                 val deliveryInstruction = hashMapOf(
                     "deliverTo" to name,
                     "contactNumber" to phone,
                     "orderPlacedOn" to timestamp,
                     "deliveryAddress" to address,
                     "products" to products,
-                    "status" to "new"
+                    "status" to "new",
+                    "email" to auth.currentUser?.email.toString(),
+                    "orderId" to randomId
                 )
                 db.collection("orders")
-                    .document()
+                    .document(randomId)
                     .set(deliveryInstruction)
                     .addOnCompleteListener() {
                         callBack(true)

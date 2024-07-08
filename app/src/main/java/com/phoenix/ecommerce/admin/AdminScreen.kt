@@ -118,17 +118,23 @@ fun AdminScreen(navController: NavController) {
 
                     when (tabIndex) {
                         0 -> items(listOfReceivedOrder) { item ->
-                            ReceivedOrders(item)
+                            ReceivedOrders(item){
+                                viewModel.addProductsAsProcessing(item)
+                            }
                         }
 
 
                         1 -> items(processingOrdersList) { item ->
-                            ReceivedOrders(item)
+                            ProcessingOrders(item){
+                                viewModel.addProductAsCompleted(item)
+                            }
                         }
 
 
                         2 -> items(completedOrdersList) { item ->
-                            ReceivedOrders(item)
+                            CompletedOrders(item){
+                                print("")
+                            }
                         }
 
                     }

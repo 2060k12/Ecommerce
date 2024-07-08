@@ -31,4 +31,18 @@ class AdminViewModel: ViewModel() {
             repository.getAllOrders()
         }
     }
+
+    fun addProductToSpotlight(product: Products){
+        repository.addProductToSpotlight(product)
+    }
+
+    fun addProductAsCompleted(products : AdminReceivedOrder){
+        repository.addProductAsCompleted(products)
+    }
+    fun addProductsAsProcessing(products : AdminReceivedOrder){
+        repository.addProductsAsProcessing(products)
+    }
+
+
+
 }
