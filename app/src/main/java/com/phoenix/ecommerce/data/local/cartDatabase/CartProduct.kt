@@ -15,4 +15,5 @@ data class CartProduct(
     @ColumnInfo(name = "item_color")val productColor : String,
     @ColumnInfo(name = "item_spec")val productSpec : String,
     @ColumnInfo(name = "item_category")val productCategory : String,
+    @ColumnInfo(name = "item_stock")val stockCount : Int,
     )

@@ -12,8 +12,9 @@ import androidx.compose.ui.unit.dp
 
 
 @Composable
-fun OutlinedButton(buttonName: String, onButtonClick : () -> Unit){
+fun OutlinedButton(buttonName: String, enabled: Boolean, onButtonClick : () -> Unit){
     OutlinedButton(
+        enabled = enabled,
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp, 0.dp, 16.dp, 0.dp),

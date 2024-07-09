@@ -44,6 +44,7 @@ class CheckOutRepository {
 
             name, phone ->
             for (products in listOfCartProducts) {
+                val currentStock = (products.currentlyOnStock -1 )
                 val randomId = UUID.randomUUID().toString()
                 val deliveryInstruction = hashMapOf(
                     "deliverTo" to name,
@@ -59,6 +60,11 @@ class CheckOutRepository {
                     .document(randomId)
                     .set(deliveryInstruction)
                     .addOnCompleteListener() {
+                        db.collection("users")
+                            .document(auth.currentUser?.email.toString())
+                            .collection("completedOrders")
+                            .document(randomId)
+                            .set(deliveryInstruction)
                         callBack(true)
                     }
                     .addOnFailureListener() {
@@ -66,6 +72,9 @@ class CheckOutRepository {
                         callBack(false)
                     }
 
+                db.collection(products.productCategory)
+                    .document(products.productId)
+                    .update("currentlyOnStock", currentStock)
 
             }
         }

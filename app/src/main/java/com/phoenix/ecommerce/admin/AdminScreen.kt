@@ -117,23 +117,31 @@ fun AdminScreen(navController: NavController) {
                 LazyColumn {
 
                     when (tabIndex) {
-                        0 -> items(listOfReceivedOrder) { item ->
-                            ReceivedOrders(item){
-                                viewModel.addProductsAsProcessing(item)
+                        0 ->
+                            items(listOfReceivedOrder) { item ->
+                                viewModel.getAllReceivedOrders()
+                                ReceivedOrders(item) {
+                                    viewModel.addProductsAsProcessing(item)
+                                    viewModel.getAllReceivedOrders()
+                                }
+
                             }
-                        }
 
 
                         1 -> items(processingOrdersList) { item ->
+                            viewModel.getAllReceivedOrders()
                             ProcessingOrders(item){
                                 viewModel.addProductAsCompleted(item)
+                                viewModel.getAllReceivedOrders()
+
                             }
                         }
 
 
                         2 -> items(completedOrdersList) { item ->
+                            viewModel.getAllReceivedOrders()
                             CompletedOrders(item){
-                                print("")
+                                viewModel.getAllReceivedOrders()
                             }
                         }
 

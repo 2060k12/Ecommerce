@@ -117,6 +117,11 @@ class AdminRepository {
             .document(products.orderId)
             .update("status", "Processing" )
             .addOnSuccessListener {
+                db.collection("users")
+                    .document(products.email)
+                    .collection("completedOrders")
+                    .document(products.orderId)
+                    .update("status", "Processing")
             }
     }
 
@@ -130,10 +135,67 @@ class AdminRepository {
                 db.collection("users")
                     .document(products.email)
                     .collection("completedOrders")
-                    .add(products)
+                    .document(products.orderId)
+                    .update("status", "Done")
             }
 
     }
+
+
+    // check if the current product is already on deals
+    // if the item/ product in on deal callback have status as true
+    // if not on del status is false
+    suspend fun checkIfItemOnDeal(products: Products, callback: (status: Boolean) -> Unit){
+
+        try {
+            val document = db.collection("offers")
+                .document(products.productId)
+                .get()
+                .await()
+
+            if(document.data != null) {
+                callback(true)
+            }
+            else {
+                callback(false)
+            }
+
+        }
+        catch (e: Exception){
+            Log.e("error", e.message.toString())
+        }
+    }
+
+
+    // fun to remove items from deals
+    suspend fun removeItemsFromDeals(products: Products){
+        try {
+            val items = db.collection("offers")
+                .document(products.productId)
+                .delete()
+                .await()
+        }
+        catch (e: Exception){
+            Log.e("error", e.message.toString())
+        }
+    }
+
+
+    // fun to add discount to apps
+    suspend fun priceChange(products: Products, amount: Float){
+        try {
+            db.collection(products.productCategory)
+                .document(products.productId)
+                .update("discountedPrice", amount)
+                .await()
+
+
+        }
+        catch (e: Exception){
+            Log.e("Error", e.message.toString())
+        }
+    }
+
 
 
 

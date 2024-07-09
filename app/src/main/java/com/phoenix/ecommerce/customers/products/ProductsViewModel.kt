@@ -19,6 +19,9 @@ class ProductsViewModel: ViewModel() {
     // stores all reviews of a product
     val allReviews = productsRepository.allReviews
 
+    // featured images of a product
+    val productImageList = productsRepository.productImageList
+
     fun getProduct(productId : String, category: String ){
         viewModelScope.launch {
             productsRepository.getProduct(productId, category)
@@ -52,6 +55,13 @@ class ProductsViewModel: ViewModel() {
     fun getUserImgAndName(email: String, callback :(userName : String, image: String) -> Unit){
         viewModelScope.launch {
             productsRepository.getUserImgAndName(email, callback )
+        }
+    }
+
+    //get all featured images of a product
+    fun getFeaturedImages(products: Products){
+        viewModelScope.launch {
+            productsRepository.getFeaturedImages(products)
         }
     }
 

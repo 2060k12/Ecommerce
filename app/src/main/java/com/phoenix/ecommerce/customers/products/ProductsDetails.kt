@@ -49,6 +49,7 @@ import com.phoenix.ecommerce.navigation.RoutesAdmin
 import com.phoenix.ecommerce.utils.FilledButton
 import com.phoenix.ecommerce.utils.OutlinedButton
 import com.phoenix.ecommerce.utils.SharedViewModel
+import kotlinx.serialization.json.JsonNull.content
 
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
@@ -73,6 +74,13 @@ val context = LocalContext.current
         mutableStateOf("")
     }
 
+    // all featured images of a product
+    val productImageList =viewModel.productImageList.observeAsState().value
+    if (product != null) {
+        viewModel.getFeaturedImages(product)
+    }
+
+    val currentStock = product?.currentlyOnStock
 
 Scaffold (
 
@@ -94,7 +102,16 @@ Scaffold (
             Modifier
                 .wrapContentHeight()
                 .padding(bottom = 30.dp)){
-            OutlinedButton("Add to Cart"){
+            val enabled = remember {
+                mutableStateOf(false)
+            }
+            if (currentStock != null) {
+                if(currentStock > 0){
+                    enabled.value = true
+
+                }
+            }
+            OutlinedButton("Add to Cart", enabled.value){
 
                 cartViewModel.getItemByID(productId){
                     cartProduct ->
@@ -113,6 +130,7 @@ Scaffold (
                                 productColor = selectedColor.value ,
                                 productSpec = selectedSpecs.value,
                                 productCategory = product.productCategory,
+                                stockCount = product.currentlyOnStock
 
                                 )
                         }
@@ -148,45 +166,8 @@ Scaffold (
 
                 // Image of our product
                 item {
-                    Column {
-
-                        // adding horizontal pager to our app so that we can scroll it like a page
-                        val pagerState = rememberPagerState(pageCount = { 3 })
-                        HorizontalPager(
-                            modifier = Modifier
-                                .wrapContentHeight(),
-                            state = pagerState
-                        ) { page ->
-
-                            if (product != null) {
-                                ProductImageView(product, navController)
-                            }
-                        }
-                        Row(
-                            modifier = Modifier
-                                .wrapContentHeight()
-                                .fillMaxWidth(),
-                            horizontalArrangement = Arrangement.Center,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            repeat(pagerState.pageCount) {
-                                val color =
-                                    if (pagerState.currentPage == it) {
-                                        Color.DarkGray
-                                    } else {
-                                        Color.LightGray
-                                    }
-
-                                Spacer(modifier = Modifier.height(20.dp))
-                                Box(
-                                    modifier = Modifier
-                                        .padding(2.dp)
-                                        .clip(CircleShape)
-                                        .background(color)
-                                        .size(8.dp)
-                                )
-                            }
-                        }
+                    if(productImageList != null) {
+                        ProductImagePagerView(listOfImages = productImageList)
                     }
                 }
                 // Product Detail
@@ -200,13 +181,14 @@ Scaffold (
 
 
                 // if the productColor is empty this item wont be shown in the lazy column
-                if(product?.productColor?.isNotEmpty() == true)
+                if(product?.productColor?.isNotEmpty() == true){
                 item {
                     ProductsChoseOptions(product.productColor){
                         selectedColor.value = it
                     }
 
                 }
+                    }
                 // if the productColor is empty this item wont be shown in the lazy column
                 if(product?.productSpecs?.isNotEmpty() == true)
                     item {

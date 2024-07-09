@@ -33,7 +33,6 @@ fun CartScreen(navController: NavController, sharedViewModel: SharedViewModel){
     val cartList = viewModel.cartList.observeAsState(initial = ArrayList()).value
     val productList = ArrayList<Products>()
 
-
     for (cartProduct in cartList) {
         val product = Products(
             cartProduct.productCategory,
@@ -43,7 +42,9 @@ fun CartScreen(navController: NavController, sharedViewModel: SharedViewModel){
             cartProduct.productIconUrl,
             cartProduct.productInfo!!,
             listOf(cartProduct.productSpec),
-            listOf(cartProduct.productColor)
+            listOf(cartProduct.productColor),
+            0f,
+            cartProduct.stockCount
         )
         productList.add(product)
     }
@@ -59,7 +60,8 @@ fun CartScreen(navController: NavController, sharedViewModel: SharedViewModel){
             Column {
                 Button(
                     shape = RoundedCornerShape(10.dp),
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
                         .padding(vertical = 8.dp, horizontal = 16.dp),
                     onClick = {
                         // Navigates to checkout screen

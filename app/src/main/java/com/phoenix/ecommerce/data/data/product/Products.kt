@@ -10,8 +10,10 @@ data class Products(
     var productIconUrl : String,
     val productInfo : String,
     val productColor : List<String>,
-    val productSpecs : List<String>
+    val productSpecs : List<String>,
+    val discountedPrice : Float,
+    val currentlyOnStock: Int
 ){
-    constructor():this("","","",0, "", "", listOf(String()), listOf(String()))
+    constructor():this("","","",0, "", "", listOf(String()), listOf(String()), 0f, 0)
 }
 

@@ -43,6 +43,24 @@ class AdminViewModel: ViewModel() {
         repository.addProductsAsProcessing(products)
     }
 
+    fun checkIfItemOnDeal(products: Products, callback: (status: Boolean) -> Unit ){
+        viewModelScope.launch() {
+            repository.checkIfItemOnDeal(products, callback)
+        }
+    }
+
+    fun removeItemsFromDeals(products: Products){
+        viewModelScope.launch {
+            repository.removeItemsFromDeals(products)
+        }
+    }
+
+    fun priceChange(products: Products, amount: Float){
+        viewModelScope.launch {
+            repository.priceChange(products, amount)
+        }
+    }
+
 
 
 }

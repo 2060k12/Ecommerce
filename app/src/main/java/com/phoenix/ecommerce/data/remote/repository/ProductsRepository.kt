@@ -1,5 +1,6 @@
 package com.phoenix.ecommerce.data.remote.repository
 
+import android.provider.ContactsContract.CommonDataKinds.Im
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
@@ -10,6 +11,7 @@ import com.google.firebase.auth.auth
 import com.google.firebase.firestore.firestore
 import com.google.firebase.firestore.toObject
 import com.phoenix.ecommerce.data.data.AdminReceivedOrder
+import com.phoenix.ecommerce.data.data.product.Image
 import com.phoenix.ecommerce.data.data.product.Products
 import com.phoenix.ecommerce.data.data.product.Review
 import com.phoenix.ecommerce.data.data.profile.Profile
@@ -53,6 +55,9 @@ class ProductsRepository {
     private val _allReviews = MutableLiveData<ArrayList<Review>>() // livedata for all reviews
     val allReviews : LiveData<ArrayList<Review>> get()= _allReviews
 
+    private val _productImageList = MutableLiveData<ArrayList<Image>>() // livedata for all images for a product
+    val productImageList : LiveData<ArrayList<Image>> get()= _productImageList
+
 
 
     // get all products from the database
@@ -64,19 +69,18 @@ class ProductsRepository {
 
         if (_productList.value == null) {
             _productList.value = ArrayList()
-        }
+            // Add the contents of each list to the product list
+            _mobileList.value?.let {
+                _productList.value?.addAll(it)
+            }
+            _watchList.value?.let {
+                _productList.value?.addAll(it)
+            }
+            _computerList.value?.let {
+                _productList.value?.addAll(it)
+            }
 
-        // Add the contents of each list to the product list
-        _mobileList.value?.let {
-            _productList.value?.addAll(it)
         }
-        _watchList.value?.let {
-            _productList.value?.addAll(it)
-        }
-        _computerList.value?.let {
-            _productList.value?.addAll(it)
-        }
-
 
     }
 
@@ -249,5 +253,36 @@ class ProductsRepository {
             Log.e("Error", e.message.toString())
         }
     }
+
+    // get product featured images
+    suspend fun getFeaturedImages(product: Products){
+        val temImgLink = ArrayList<Image>()
+        try {
+            val images = db.collection(product.productCategory)
+                .document(product.productId)
+                .collection("featuredImages")
+                .get()
+                .await()
+
+            for (img in images){
+               val temp = img.toObject<Image>()
+                temImgLink.add(temp)
+            }
+
+            // here we are adding the product icon image to the featured images list which we can see inside products detail page
+            // which it is not necessary to check if the image is null, this will add an extra layer of safety against null values
+            _productImageList.value = temImgLink
+            if(_clickedProduct.value != null){
+                val newTempImg = Image(_clickedProduct.value!!.productIconUrl)
+                _productImageList.value!!.add(newTempImg)
+            }
+
+
+        }
+        catch (e: Exception){
+            Log.e("Error", e.message.toString())
+        }
+    }
+
 
 }

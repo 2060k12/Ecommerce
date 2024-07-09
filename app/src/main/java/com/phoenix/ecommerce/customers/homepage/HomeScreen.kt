@@ -68,6 +68,17 @@ fun HomeScreen(navController: NavController){
                         .verticalScroll(rememberScrollState()),
                 )
                 {
+                    Text(
+                        modifier = Modifier.padding(horizontal = 8.dp),
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 28.sp,
+                        text = "G'day,")
+                    Text(
+                        modifier = Modifier.padding(horizontal = 8.dp),
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 28.sp,
+                        text = "Explore deals")
+
                      OfferBanner(offerList, navController)
 
                     Text(

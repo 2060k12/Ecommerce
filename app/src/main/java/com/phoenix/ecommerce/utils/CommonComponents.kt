@@ -67,7 +67,7 @@ fun AddReviewStar(
         for (i in 1..maxStars) {
             val isSelected = i <= rating
             val icon = if (isSelected) Icons.Filled.Star else Icons.Default.Star
-            val iconTintColor = if (isSelected) Color(0xFFFFC700) else Color(0x20FFFFFF)
+            val iconTintColor = if (isSelected) Color(0xFFFFC700) else MaterialTheme.colorScheme.primaryContainer
             Icon(
                 imageVector = icon,
                 contentDescription = null,

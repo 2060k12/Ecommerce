@@ -115,7 +115,9 @@ fun AddProductSecondScreen(navController: NavController, productName: String, pr
                             productIconUrl = imageLink.toString(),
                             productInfo =productInfo,
                             productColor = pickedColors.toList(),
-                            productSpecs = productSpecsOptions
+                            productSpecs = productSpecsOptions,
+                            discountedPrice = 0f,
+                            0
                         )
                         viewModel.addNewProduct(product)
 
