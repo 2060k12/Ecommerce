@@ -22,6 +22,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -32,13 +33,16 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.google.android.play.integrity.internal.i
 import com.phoenix.ecommerce.data.data.product.Products
+import com.phoenix.ecommerce.data.data.product.Review
 import com.phoenix.ecommerce.navigation.Routes
 import com.phoenix.ecommerce.utils.ReviewStars
 import com.phoenix.ecommerce.utils.SharedViewModel
+import kotlin.math.roundToInt
 
 
 @Composable
@@ -77,6 +81,20 @@ fun ProductImageViewHomePage(products: Products, navController: NavController){
 
 @Composable
 fun ProductDetail(products: Products){
+    val viewModel : ProductsViewModel = viewModel()
+    val allReviews= viewModel.allReviews.observeAsState().value
+    viewModel.getAllReviews(products)
+
+    fun calculateAvgRating(allReviews: List<Review>?): Double {
+        var tempRating = 0.0
+        if (allReviews != null && allReviews.isNotEmpty()) {
+            for (review in allReviews) {
+                tempRating += review.rating
+            }
+            tempRating /= allReviews.size
+        }
+        return tempRating
+    }
 
     Column(modifier = Modifier.padding(16.dp, 8.dp, 16.dp,8.dp)) {
         Text(
@@ -89,8 +107,17 @@ fun ProductDetail(products: Products){
             text = "AU$ " + products.productCost.toString())
         
         Spacer(modifier = Modifier.height(8.dp))
-        ReviewStars(color = Color(0xffffa534), numberOfStars = 4)
-        
+        // review star
+        Row {
+            Text(text = "Average Rating: ")
+
+            ReviewStars(
+                color = Color(0xffffa534),
+                numberOfStars = calculateAvgRating(allReviews).roundToInt()
+            )
+            Text(text = "  (${allReviews?.size})")
+
+        }
     }
 }
 

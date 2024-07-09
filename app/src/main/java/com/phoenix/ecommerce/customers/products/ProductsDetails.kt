@@ -27,6 +27,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -41,6 +42,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.phoenix.ecommerce.customers.cart.CartViewModel
 import com.phoenix.ecommerce.data.data.product.Products
+import com.phoenix.ecommerce.data.data.product.Review
 import com.phoenix.ecommerce.data.local.cartDatabase.CartProduct
 import com.phoenix.ecommerce.navigation.Routes
 import com.phoenix.ecommerce.navigation.RoutesAdmin
@@ -70,6 +72,7 @@ val context = LocalContext.current
     val selectedSpecs = remember {
         mutableStateOf("")
     }
+
 
 Scaffold (
 

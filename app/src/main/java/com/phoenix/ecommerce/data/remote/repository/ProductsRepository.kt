@@ -5,11 +5,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.Firebase
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.firestore
 import com.google.firebase.firestore.toObject
 import com.phoenix.ecommerce.data.data.AdminReceivedOrder
 import com.phoenix.ecommerce.data.data.product.Products
+import com.phoenix.ecommerce.data.data.product.Review
+import com.phoenix.ecommerce.data.data.profile.Profile
 import kotlinx.coroutines.tasks.await
 import kotlin.math.log
 
@@ -46,6 +49,10 @@ class ProductsRepository {
 
     private val _orderedProductList = MutableLiveData<ArrayList<AdminReceivedOrder>>() // live data for all ordered product by current user
     val orderedProductList: LiveData<ArrayList<AdminReceivedOrder>> get() = _orderedProductList
+
+    private val _allReviews = MutableLiveData<ArrayList<Review>>() // livedata for all reviews
+    val allReviews : LiveData<ArrayList<Review>> get()= _allReviews
+
 
 
     // get all products from the database
@@ -153,12 +160,6 @@ class ProductsRepository {
     }
 
 
-    // add Comments or feedback for any product
-    fun addComment(products: Products, comment : String){
-        db.collection(products.productCategory.lowercase())
-            .document(products.productId)
-
-    }
     // get all orderedProducts
     suspend fun getALlOrderedProducts(){
         val tempAllOrderedProducts = ArrayList<AdminReceivedOrder>()
@@ -182,5 +183,71 @@ class ProductsRepository {
 
     }
 
+
+    // add reviews on a post
+    suspend fun addReviews(product: Products, rating: Int, comment: String){
+        val timestamp = Timestamp.now()
+        val review = hashMapOf(
+            "comment" to comment,
+            "rating" to rating,
+            "userEmail" to auth.currentUser?.email.toString(),
+            "time" to timestamp
+        )
+        try {
+            db.collection(product.productCategory)
+                .document(product.productId)
+                .collection("reviews")
+                .document(auth.currentUser?.email.toString())
+                .set(review)
+                .await()
+
+        }
+        catch (e: Exception){
+            Log.e("error", e.message.toString())
+        }
+
+    }
+
+    // get all reviews of a product
+
+    suspend fun getALlReviews(product: Products){
+        val tempReviews = ArrayList<Review>()
+        try {
+            val reviews = db.collection(product.productCategory)
+                .document(product.productId)
+                .collection("reviews")
+                .get()
+                .await()
+
+            for (eachReview in reviews){
+                val temp = eachReview.toObject(Review::class.java)
+                tempReviews.add(temp)
+            }
+
+            _allReviews.value = tempReviews
+
+        }catch (e: Exception){
+            Log.e("error", e.message.toString())
+        }
+    }
+
+    // get user profile image and Name
+    // this function will be used to load the profile image and names in reviews
+    suspend fun getUserImgAndName(email: String, callback :(userName : String, image: String) -> Unit) {
+
+        try {
+            val doc = db.collection("users")
+                .document(email)
+                .get()
+                .await()
+            val user = doc.toObject<Profile>()
+            if (user != null) {
+                callback(user.name, user.profileImage)
+            }
+        }
+        catch (e: Exception){
+            Log.e("Error", e.message.toString())
+        }
+    }
 
 }
