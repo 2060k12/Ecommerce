@@ -1,6 +1,7 @@
 package com.phoenix.ecommerce.customers.products
 
 import android.media.Rating
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -43,6 +44,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
@@ -52,8 +54,10 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.google.android.play.integrity.internal.i
 import com.phoenix.ecommerce.data.data.product.Products
 import com.phoenix.ecommerce.data.data.product.Review
+import com.phoenix.ecommerce.utils.AddReviewStar
 import com.phoenix.ecommerce.utils.ReviewStars
 import com.phoenix.ecommerce.utils.SharedViewModel
 import kotlin.math.roundToInt
@@ -62,6 +66,7 @@ import kotlin.math.roundToInt
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProductReviewScreen(navController: NavController,sharedViewModel: SharedViewModel) {
+    val context = LocalContext.current
 
     val products = sharedViewModel.product
     val viewModel : ProductsViewModel = viewModel()
@@ -171,7 +176,28 @@ fun ProductReviewScreen(navController: NavController,sharedViewModel: SharedView
 
 @Composable
 fun EachReview(review: Review){
+
+    val viewModel : ProductsViewModel = viewModel()
+    val userName = remember {
+        mutableStateOf("")
+    }
+    val profileImage = remember {
+        mutableStateOf("")
+    }
+
+    viewModel.getUserImgAndName(review.userEmail){
+        name,image ->
+        userName.value = name
+        profileImage.value = image
+    }
+
     Card (
+        colors = CardColors(
+            containerColor =MaterialTheme.colorScheme.primaryContainer,
+            contentColor =MaterialTheme.colorScheme.primary,
+            disabledContainerColor=MaterialTheme.colorScheme.primaryContainer,
+            disabledContentColor =MaterialTheme.colorScheme.primary
+        ),
         modifier = Modifier.fillMaxWidth()
     ){
         Column (
@@ -182,27 +208,25 @@ fun EachReview(review: Review){
             Row (
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween){
-                // TODO: image of user
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                    horizontalArrangement = Arrangement.spacedBy(5.dp)) {
                     Card(
-                        shape = CircleShape,
+                        shape = RoundedCornerShape(10.dp),
                         modifier = Modifier
                             .wrapContentSize()
-                            // TODO: remove red
-                            .background(Color.Red)
+
                     ) {
                         AsyncImage(
-                            modifier = Modifier.size(40.dp),
-                            model = "", contentDescription = "Profile Image"
+                            modifier = Modifier.size(50.dp),
+                            model = profileImage.value, contentDescription = "Profile Image"
                         )
                     }
                     Column {
                         Text(
                             fontSize = 18.sp,
                             fontWeight = FontWeight.Bold,
-                            text = "Pranish Pathak"
+                            text = userName.value
                         )
                         ReviewStars(color = Color(0xffffa534), numberOfStars = review.rating)
                     }
@@ -224,10 +248,13 @@ fun EachReview(review: Review){
 
 @Composable
 fun AddCommentDialogue(products: Products,viewModel: ProductsViewModel, stateChange :(Boolean)->Unit) {
+
+    val context = LocalContext.current
+
     val comment = remember {
         mutableStateOf("")
     }
-    val rating = remember { mutableIntStateOf(0) }
+    val rating = remember { mutableIntStateOf(1) }
 
     Dialog(
         onDismissRequest = {
@@ -250,7 +277,9 @@ fun AddCommentDialogue(products: Products,viewModel: ProductsViewModel, stateCha
                     fontWeight = FontWeight.Bold,
                     fontSize = 24.sp,
                     text = "Add Review")
-                ReviewStars(color = Color(0xffffa534), numberOfStars = 3)
+                AddReviewStar(rating = rating.intValue.toFloat()){
+                    rating.intValue = it.toInt()
+                }
 
                 OutlinedTextField(
                     trailingIcon = {

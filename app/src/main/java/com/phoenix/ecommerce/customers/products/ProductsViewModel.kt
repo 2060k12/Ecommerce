@@ -48,5 +48,12 @@ class ProductsViewModel: ViewModel() {
         }
     }
 
+    // get user image and name
+    fun getUserImgAndName(email: String, callback :(userName : String, image: String) -> Unit){
+        viewModelScope.launch {
+            productsRepository.getUserImgAndName(email, callback )
+        }
+    }
+
 
 }

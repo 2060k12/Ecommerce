@@ -12,6 +12,7 @@ import com.google.firebase.firestore.toObject
 import com.phoenix.ecommerce.data.data.AdminReceivedOrder
 import com.phoenix.ecommerce.data.data.product.Products
 import com.phoenix.ecommerce.data.data.product.Review
+import com.phoenix.ecommerce.data.data.profile.Profile
 import kotlinx.coroutines.tasks.await
 import kotlin.math.log
 
@@ -219,7 +220,7 @@ class ProductsRepository {
                 .await()
 
             for (eachReview in reviews){
-                val temp = eachReview.toObject<Review>()
+                val temp = eachReview.toObject(Review::class.java)
                 tempReviews.add(temp)
             }
 
@@ -227,6 +228,25 @@ class ProductsRepository {
 
         }catch (e: Exception){
             Log.e("error", e.message.toString())
+        }
+    }
+
+    // get user profile image and Name
+    // this function will be used to load the profile image and names in reviews
+    suspend fun getUserImgAndName(email: String, callback :(userName : String, image: String) -> Unit) {
+
+        try {
+            val doc = db.collection("users")
+                .document(email)
+                .get()
+                .await()
+            val user = doc.toObject<Profile>()
+            if (user != null) {
+                callback(user.name, user.profileImage)
+            }
+        }
+        catch (e: Exception){
+            Log.e("Error", e.message.toString())
         }
     }
 
