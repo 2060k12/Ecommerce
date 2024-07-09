@@ -19,7 +19,7 @@ fun ReviewStars(color : Color, numberOfStars : Int) {
 
             }
             else{
-                Icon(tint = MaterialTheme.colorScheme.inverseOnSurface,
+                Icon(tint = MaterialTheme.colorScheme.outlineVariant,
                     imageVector = Icons.Default.Star, contentDescription = "1")
             }
         }

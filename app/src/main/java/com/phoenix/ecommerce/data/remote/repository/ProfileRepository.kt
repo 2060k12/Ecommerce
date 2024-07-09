@@ -23,7 +23,6 @@ class ProfileRepository {
     val currentUsersProfile : MutableState<Profile> =  mutableStateOf(Profile())
 
     // get current Profile Information
-
     fun getProfileInfo(){
 
         try {
