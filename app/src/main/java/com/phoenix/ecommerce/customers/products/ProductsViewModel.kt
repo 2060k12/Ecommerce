@@ -1,7 +1,10 @@
 package com.phoenix.ecommerce.customers.products
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.phoenix.ecommerce.data.data.AdminReceivedOrder
+import com.phoenix.ecommerce.data.data.product.Image
 import com.phoenix.ecommerce.data.data.product.Products
 import com.phoenix.ecommerce.data.remote.repository.ProductsRepository
 import kotlinx.coroutines.launch
@@ -21,6 +24,10 @@ class ProductsViewModel: ViewModel() {
 
     // featured images of a product
     val productImageList = productsRepository.productImageList
+
+    val refundList : LiveData<ArrayList<AdminReceivedOrder>> get() = productsRepository.refundList
+
+
 
     fun getProduct(productId : String, category: String ){
         viewModelScope.launch {
@@ -63,6 +70,13 @@ class ProductsViewModel: ViewModel() {
         viewModelScope.launch {
             productsRepository.getFeaturedImages(products)
         }
+    }
+
+    fun setFeaturedImages(product: Products, imageList: ArrayList<Image>) {
+        viewModelScope.launch {
+            productsRepository.setFeaturedImages(product, imageList)
+        }
+
     }
 
 

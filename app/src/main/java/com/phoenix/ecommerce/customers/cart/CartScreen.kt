@@ -72,7 +72,7 @@ fun CartScreen(navController: NavController, sharedViewModel: SharedViewModel){
                     Text(text = "Checkout")
 
                 }
-                BottomNavBar(navController)
+                BottomNavBar(navController, selected = "cart")
             }
 
         }
@@ -84,13 +84,13 @@ fun CartScreen(navController: NavController, sharedViewModel: SharedViewModel){
             modifier = Modifier.padding(innerPadding)) {
 
             LazyColumn (
-                verticalArrangement = Arrangement.spacedBy(12.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
                 modifier = Modifier
                     .padding(16.dp)
                     .fillMaxSize()) {
 
                 items(cartList){
-                    EachCartItem(cartProduct = it )
+                    EachCartItem(navController, cartProduct = it )
                 }
             }
 

@@ -20,6 +20,8 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Create
+import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -28,6 +30,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -35,31 +39,63 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.phoenix.ecommerce.utils.SharedViewModel
+import kotlinx.coroutines.launch
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EditProfileScreen(sharedViewModel: SharedViewModel) {
+fun EditProfileScreen(navController: NavController, sharedViewModel: SharedViewModel) {
 
     val name = sharedViewModel.profileInfo.name
+    val phone = sharedViewModel.profileInfo.phone
+    val address = sharedViewModel.profileInfo.address
     val imageLink = sharedViewModel.profileInfo.profileImage
+
+    val viewModel : ProfileViewModel = viewModel()
 
     val nameText = remember {
         mutableStateOf(name)
     }
+    val addressText = remember {
+        mutableStateOf(address)
+    }
+    val phoneText = remember {
+        mutableStateOf(phone)
+    }
+    val img = remember {
+        mutableStateOf(imageLink)
+    }
+    val snackBarScope = rememberCoroutineScope()
+
+
 
     Scaffold(
+
+
         topBar = {
+
             TopAppBar(
 
+                navigationIcon = {
+                    IconButton(onClick = {
+
+                        navController.navigateUp()
+                    }) {
+
+                        Icon(imageVector = Icons.AutoMirrored.Default.ArrowBack, contentDescription = "back")
+                    }
+                },
                 title = {
                 Text(text = "Edit Profile ")
 
@@ -74,7 +110,19 @@ fun EditProfileScreen(sharedViewModel: SharedViewModel) {
                     modifier = Modifier
                         .padding(horizontal = 16.dp)
                         .fillMaxWidth(),
-                    onClick = { /*TODO*/ }) {
+                    onClick = {
+                        when(sharedViewModel.editDetail){
+                            "nameAndImage" ->
+                                viewModel.editProfileNameImage(sharedViewModel.profileInfo, sharedViewModel.editDetail, nameText.value,img.value)
+
+                            "phone" ->
+                                viewModel.editProfileInformation(sharedViewModel.profileInfo, sharedViewModel.editDetail, editedInfo = phoneText.value)
+                            "address" ->
+                                viewModel.editProfileInformation(sharedViewModel.profileInfo, sharedViewModel.editDetail, editedInfo = addressText.value)
+
+                        }
+
+                    }) {
                     Text(text = "Save")
                 }
                 OutlinedButton(
@@ -84,7 +132,10 @@ fun EditProfileScreen(sharedViewModel: SharedViewModel) {
                             horizontal = 16.dp
                         )
                         .fillMaxWidth(),
-                    onClick = { /*TODO*/ }) {
+                    onClick = {
+                        navController.navigateUp()
+
+                    }) {
                     Text(text = "Cancel")
                 }
             }
@@ -92,63 +143,114 @@ fun EditProfileScreen(sharedViewModel: SharedViewModel) {
 
     ) {
         innerPadding->
-        Column(
-            verticalArrangement = Arrangement.Top,
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
-                .padding(innerPadding)
-                .fillMaxSize()) {
-            Card (
-                shape = CircleShape,
-                modifier = Modifier.size(200.dp)
-            ) {
-                Box(
-                    contentAlignment = Alignment.BottomCenter,
-                    modifier =
-                    Modifier
-                        .fillMaxSize()
-                        .clip(CircleShape)
+        when (sharedViewModel.editDetail){
+
+            "nameAndImage" ->
+                Column(
+                verticalArrangement = Arrangement.Top,
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .padding(innerPadding)
+                    .fillMaxSize()) {
+                Card(
+                    shape = CircleShape,
+                    modifier = Modifier.size(200.dp)
                 ) {
-
-                    AsyncImage(
-                        modifier = Modifier.fillMaxSize(),
-                        model = imageLink, contentDescription = "")
-
-
-                    Row(
-                        modifier = Modifier
-                            .padding(vertical = 16.dp, horizontal = 30.dp)
-                            .clickable {
-                                println("Hello World")
-                            },
-                        verticalAlignment = Alignment.CenterVertically
+                    Box(
+                        contentAlignment = Alignment.BottomCenter,
+                        modifier =
+                        Modifier
+                            .fillMaxSize()
+                            .clip(CircleShape)
                     ) {
+
+                        AsyncImage(
+                            modifier = Modifier.fillMaxSize(),
+                            model = imageLink, contentDescription = ""
+                        )
+
+
+                        Row(
+                            modifier = Modifier
+                                .padding(vertical = 16.dp, horizontal = 30.dp)
+                                .clickable {
+                                    println("Hello World")
+                                },
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
                             Icon(
                                 imageVector = Icons.Default.Create,
                                 contentDescription = "Add image"
                             )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(text = "Edit")
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(text = "Edit")
+                        }
                     }
                 }
-            }
 
-            Spacer(modifier = Modifier.height(20.dp))
-            OutlinedTextField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                leadingIcon = {
-                    Icon(imageVector = Icons.Default.AccountCircle, contentDescription = "")
-                },
-                singleLine = true,
-                value = nameText.value, onValueChange = {
-                    nameText.value = it
+                Spacer(modifier = Modifier.height(20.dp))
+                OutlinedTextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    leadingIcon = {
+                        Icon(imageVector = Icons.Default.AccountCircle, contentDescription = "")
+                    },
+                    singleLine = true,
+                    value = nameText.value, onValueChange = {
+                        nameText.value = it
+                    }
+                ) }
+
+            "phone" ->
+                Column(
+
+                    verticalArrangement = Arrangement.Top,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier
+                        .padding(innerPadding)){
+                    OutlinedTextField(
+                        label = {
+                            Text(text = "Phone Number")
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        leadingIcon = {
+                            Icon(imageVector = Icons.Default.Phone, contentDescription = "")
+                        },
+                        singleLine = true,
+                        value = phoneText.value, onValueChange = {
+                            phoneText.value = it
+                        }
+                    ) }
+
+            "address" ->
+                Column(
+                    verticalArrangement = Arrangement.Top,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier
+                        .padding(innerPadding)) {
+
+                    OutlinedTextField(
+                        label = {
+                            Text(text = "Address")
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        leadingIcon = {
+                            Icon(imageVector = Icons.Default.LocationOn, contentDescription = "")
+                        },
+                        singleLine = true,
+                        value = addressText.value, onValueChange = {
+                            addressText.value = it
+                        }
+                    ) }
+        }
+
                 }
-            )
 
 
 
         }
-    }
-}

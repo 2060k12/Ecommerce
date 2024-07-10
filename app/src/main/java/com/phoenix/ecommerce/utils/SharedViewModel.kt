@@ -1,5 +1,6 @@
 package com.phoenix.ecommerce.utils
 
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -12,7 +13,10 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 class SharedViewModel : ViewModel() {
-
+    
+    // edit detail for example, if you are editing phoneNumber it will be phone.
+    var editDetail = ""
+        private set
 
     // to use edit profile feature
     var profileInfo = Profile()
@@ -35,6 +39,10 @@ class SharedViewModel : ViewModel() {
 
     fun addProfileInfo(newProfile: Profile){
         profileInfo = newProfile
+    }
+
+    fun addEditDetails (detail : String){
+        editDetail = detail
     }
 
 

@@ -45,13 +45,13 @@ fun HomeScreen(navController: NavController){
         Scaffold(
             modifier = Modifier.fillMaxSize(),
             topBar = {
-                TopAppBar(title = { 
+                TopAppBar(title = {
                     Text(text = "Home")
                 })
             },
 
             bottomBar = {
-               BottomNavBar(navController = navController)
+               BottomNavBar(navController = navController, "home")
             }
         
         ) {
@@ -74,10 +74,10 @@ fun HomeScreen(navController: NavController){
                         fontSize = 28.sp,
                         text = "G'day,")
                     Text(
-                        modifier = Modifier.padding(horizontal = 8.dp),
+                        modifier = Modifier.padding(8.dp,8.dp,8.dp, 16.dp ),
                         fontWeight = FontWeight.Bold,
                         fontSize = 28.sp,
-                        text = "Explore deals")
+                        text = "Today's Deal,")
 
                      OfferBanner(offerList, navController)
 

@@ -17,6 +17,7 @@ class AdminViewModel: ViewModel() {
     val listOfReceivedOrder : LiveData<ArrayList<AdminReceivedOrder>> get() = repository.listOfReceivedOrder
     val completedOrdersList : LiveData<ArrayList<AdminReceivedOrder>> get() = repository.completedOrdersList
     val processingOrdersList : LiveData<ArrayList<AdminReceivedOrder>> get() = repository.processingOrdersList
+    val refundList : LiveData<ArrayList<AdminReceivedOrder>> get() = repository.refundList
 
 
 
@@ -61,6 +62,25 @@ class AdminViewModel: ViewModel() {
         }
     }
 
+    fun removeProduct(products: Products, callback: (status: Boolean) -> Unit) {
+        viewModelScope.launch {
+            repository.removeProduct(products, callback)
+        }
+    }
+
+    fun refundProduct(item: AdminReceivedOrder, callback: (status: Boolean) -> Unit) {
+        viewModelScope.launch {
+            repository.refund(item, callback)
+        }
+
+    }
+
+    fun updateStockCount(products: Products, newStock: Int) {
+        viewModelScope.launch {
+            repository.updateStockCount(products, newStock)
+        }
+
+    }
 
 
 }

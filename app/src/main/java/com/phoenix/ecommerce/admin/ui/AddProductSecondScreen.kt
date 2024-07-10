@@ -1,7 +1,6 @@
-package com.phoenix.ecommerce.admin
+package com.phoenix.ecommerce.admin.ui
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -11,12 +10,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 
 
 import androidx.compose.material3.Button
@@ -35,9 +33,6 @@ import androidx.navigation.NavController
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
-import androidx.compose.material.icons.sharp.AccountBox
-import androidx.compose.material.icons.sharp.Edit
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -47,14 +42,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.room.util.TableInfo
-import com.google.android.play.integrity.internal.i
+import com.phoenix.ecommerce.admin.AdminViewModel
 import com.phoenix.ecommerce.data.data.product.Products
 import java.util.UUID
 
@@ -78,6 +72,12 @@ fun AddProductSecondScreen(navController: NavController, productName: String, pr
     val productSpecsOptions =  remember {
         mutableStateListOf<String>()
     }
+    val stockCount =  remember {
+        mutableStateOf("")
+    }
+
+
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -117,7 +117,7 @@ fun AddProductSecondScreen(navController: NavController, productName: String, pr
                             productColor = pickedColors.toList(),
                             productSpecs = productSpecsOptions,
                             discountedPrice = 0f,
-                            0
+                            stockCount.value.toInt()
                         )
                         viewModel.addNewProduct(product)
 
@@ -229,8 +229,6 @@ fun AddProductSecondScreen(navController: NavController, productName: String, pr
                     }
                 }
 
-
-
                 Column {
 
                     Card(
@@ -260,6 +258,23 @@ fun AddProductSecondScreen(navController: NavController, productName: String, pr
                                 imageVector = Icons.AutoMirrored.Default.KeyboardArrowRight, contentDescription = "")
                         }
                     }
+
+
+                    // Add Stock Count
+                    OutlinedTextField(
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        label = {
+                            Text(text = "Enter Stock Count")
+                        },
+                        shape = RoundedCornerShape(5.dp),
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp)
+                            .fillMaxWidth(),
+                        value = stockCount.value, onValueChange ={
+                            str ->
+                        stockCount.value = str
+                    }
+                    )
 
 
 

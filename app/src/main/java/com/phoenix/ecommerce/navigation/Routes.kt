@@ -19,6 +19,7 @@ object Routes {
     const val PROFILE_SCREEN = "PROFILE_SCREEN"
     const val CHECKOUT_SCREEN = "CHECKOUT_SCREEN"
     const val SIGNUP_SCREEN = "SIGNUP_SCREEN"
+    const val ADD_IMAGES_SCREEN = "ADD_IMAGES_SCREEN"
 
 }
 
