@@ -8,11 +8,12 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
-import com.phoenix.ecommerce.admin.AddProductScreen
-import com.phoenix.ecommerce.admin.AddProductSecondScreen
-import com.phoenix.ecommerce.admin.AdminEditEachProductScreen
-import com.phoenix.ecommerce.admin.AdminEditScreen
-import com.phoenix.ecommerce.admin.AdminScreen
+import com.phoenix.ecommerce.admin.ui.AddImagesScreen
+import com.phoenix.ecommerce.admin.ui.AddProductScreen
+import com.phoenix.ecommerce.admin.ui.AddProductSecondScreen
+import com.phoenix.ecommerce.admin.ui.AdminEditEachProductScreen
+import com.phoenix.ecommerce.admin.ui.AdminEditScreen
+import com.phoenix.ecommerce.admin.ui.AdminScreen
 import com.phoenix.ecommerce.customers.cart.CartScreen
 import com.phoenix.ecommerce.customers.checkout.CheckOutScreen
 import com.phoenix.ecommerce.customers.homepage.HomeScreen
@@ -42,6 +43,11 @@ fun NavigationGraph(navHostController: NavHostController, startDestination: Stri
         composable(Routes.PRODUCT_REVIEW_SCREEN) {
             ProductReviewScreen(navController = navHostController, sharedViewModel)
         }
+        // add images screen
+        composable(Routes.ADD_IMAGES_SCREEN) {
+            AddImagesScreen( sharedViewModel, navHostController)
+        }
+
 
         // Home Screen
         composable(Routes.HOME_SCREEN) {
@@ -55,7 +61,7 @@ fun NavigationGraph(navHostController: NavHostController, startDestination: Stri
 
         // edit Profile Screen
         composable(Routes.EDIT_PROFILE_SCREEN) {
-            EditProfileScreen(sharedViewModel)
+            EditProfileScreen(navController = navHostController, sharedViewModel)
 
         }
 
@@ -84,7 +90,7 @@ fun NavigationGraph(navHostController: NavHostController, startDestination: Stri
         
         // Search Screen
         composable(Routes.SEARCH_SCREEN) {
-            SearchScreen(navHostController)
+            SearchScreen(navHostController, sharedViewModel)
         }
 
         // Profile Screen
@@ -123,7 +129,7 @@ fun NavigationGraph(navHostController: NavHostController, startDestination: Stri
 
         composable<RoutesAdmin.AdminEditEachProductScreen> {
             val passedArgument = it.toRoute<RoutesAdmin.AdminEditEachProductScreen>()
-            AdminEditEachProductScreen(products = sharedViewModel.product, navHostController )
+            AdminEditEachProductScreen(sharedViewModel =  sharedViewModel, products = sharedViewModel.product, navHostController )
         }
 
 

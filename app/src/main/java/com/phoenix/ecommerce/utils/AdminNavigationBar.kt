@@ -15,28 +15,23 @@ import com.phoenix.ecommerce.navigation.Routes
 import com.phoenix.ecommerce.navigation.RoutesAdmin
 
 @Composable
-fun AdminNavigationBar(navController: NavController) {
+fun AdminNavigationBar(navController: NavController, selected: String) {
 
 
     NavigationBar {
-        // state of current screen
-        val currentScreenDashboard = remember {
-            mutableStateOf(true)
-        }
 
-        NavigationBarItem(selected = currentScreenDashboard.value,
+
+        NavigationBarItem(selected = selected == "dashboard",
             onClick = {
                 // navigates to Admin Dashboard
-                currentScreenDashboard.value = true
                 navController.navigate(Routes.ADMIN_DASHBOARD)
 
             }, icon = {
                 Icon(imageVector = Icons.Default.Home, contentDescription = "Dashboard")
             })
 
-        NavigationBarItem(selected = !currentScreenDashboard.value
+        NavigationBarItem(selected = selected =="add"
             , onClick = {
-                currentScreenDashboard.value = false
                 // navigates to Admin Add new product
                 navController.navigate(RoutesAdmin.AdminAddScreenOne)
 
@@ -46,14 +41,13 @@ fun AdminNavigationBar(navController: NavController) {
             })
 
 
-        NavigationBarItem(selected = !currentScreenDashboard.value
+        NavigationBarItem(selected = selected == "products"
             , onClick = {
-                currentScreenDashboard.value = false
                 // navigates to Current products page
                 navController.navigate(RoutesAdmin.AdminEditScreen)
 
             }, icon = {
-                Icon(imageVector = Icons.Default.Info, contentDescription = "Add")
+                Icon(imageVector = Icons.Default.Info, contentDescription = "products")
             })
     }
 }

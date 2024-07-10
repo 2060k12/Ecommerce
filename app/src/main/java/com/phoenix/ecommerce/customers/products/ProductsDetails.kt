@@ -80,6 +80,8 @@ val context = LocalContext.current
         viewModel.getFeaturedImages(product)
     }
 
+    val addToCartButtonText = remember{mutableStateOf("Add to Cart")}
+
     val currentStock = product?.currentlyOnStock
 
 Scaffold (
@@ -108,17 +110,16 @@ Scaffold (
             if (currentStock != null) {
                 if(currentStock > 0){
                     enabled.value = true
-
+                    addToCartButtonText.value = "Add to Cart"
+                }
+                else{
+                    addToCartButtonText.value = "Out of Stock"
                 }
             }
-            OutlinedButton("Add to Cart", enabled.value){
+            OutlinedButton(addToCartButtonText.value, enabled.value){
 
                 cartViewModel.getItemByID(productId){
                     cartProduct ->
-
-                    // TODO: fix the cart page
-                    // TODO: same products with different specs or color are alos getting merged into a same one
-                    if(cartProduct == null){
                         val tempCart = product?.let {
                             CartProduct(
                                 productId = productId,
@@ -131,19 +132,12 @@ Scaffold (
                                 productSpec = selectedSpecs.value,
                                 productCategory = product.productCategory,
                                 stockCount = product.currentlyOnStock
-
                                 )
                         }
                         if (tempCart != null) {
                             cartViewModel.addToCart(tempCart)
                         }
-                    }
 
-                    else{
-                        val tempCart = cartProduct.copy()
-                        tempCart.productCount = tempCart.productCount?.plus(1)
-                        cartViewModel.updateCart(tempCart)
-                    }
                 }
 
 

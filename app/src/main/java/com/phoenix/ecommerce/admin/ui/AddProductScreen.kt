@@ -1,9 +1,7 @@
-package com.phoenix.ecommerce.admin
+package com.phoenix.ecommerce.admin.ui
 
 import android.net.Uri
-import android.os.Bundle
 import android.widget.Toast
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -41,20 +39,16 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
-import com.phoenix.ecommerce.data.data.product.Products
-import com.phoenix.ecommerce.navigation.Routes
 import com.phoenix.ecommerce.navigation.RoutesAdmin
 import com.phoenix.ecommerce.utils.AdminNavigationBar
 import com.phoenix.ecommerce.utils.SharedViewModel
@@ -71,7 +65,7 @@ fun AddProductScreen(navController: NavController){
         mutableStateOf<Uri?>(null)
     }
     //  Launch our gallery to pick images
-    val launch =galleryLauncher {
+    val launch = galleryLauncher {
         imageLink = it
     }
     // Name of the product
@@ -112,7 +106,7 @@ fun AddProductScreen(navController: NavController){
         
         // bottom bar
         bottomBar = {
-            AdminNavigationBar(navController = navController)
+            AdminNavigationBar(navController = navController, "add")
         }
         
     ) {

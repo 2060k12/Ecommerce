@@ -29,10 +29,12 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
@@ -53,8 +55,25 @@ fun OrderHistoryScreen(navController: NavController) {
     val viewModel : ProductsViewModel = viewModel()
 
     // all ordered product by current user
-    var orderedList = viewModel.orderedProductList.observeAsState().value
+    val orderedList = viewModel.orderedProductList.observeAsState().value
     viewModel.getALlOrderedList()
+
+    val processingOrders = ArrayList<AdminReceivedOrder>()
+    val newOrders = ArrayList<AdminReceivedOrder>()
+    val doneOrders = ArrayList<AdminReceivedOrder>()
+    val refunds = ArrayList<AdminReceivedOrder>()
+    var selected = orderedList
+
+    if (orderedList != null) {
+        for (order in orderedList){
+            when(order.status.lowercase()) {
+                "new" -> newOrders.add(order)
+                "processing" -> processingOrders.add(order)
+                "done" -> doneOrders.add(order)
+                "refund" -> refunds.add(order)
+            }
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -71,7 +90,6 @@ fun OrderHistoryScreen(navController: NavController) {
             })
         },
         bottomBar = {
-            BottomNavBar(navController = navController)
         }
     ) {
         Surface(modifier = Modifier.padding(it)) {
@@ -80,50 +98,59 @@ fun OrderHistoryScreen(navController: NavController) {
                 mutableStateOf("")
             }
 
-
-            Column {
+            Column() {
 
                 Row (
-                    modifier = Modifier.padding(vertical = 16.dp)
+                    horizontalArrangement = Arrangement.spacedBy(4.dp),
+                    modifier = Modifier.padding(8.dp)
                 ){
 
                     FilterChip(
                   modifier = Modifier
-                            .weight(1f)
-                            .padding(start = 16.dp, end = 8.dp)
-                        ,
+                      .weight(1f),
                         selected = if(selectedFilter.value == "new") true else false,
                         onClick = {
                             selectedFilter.value = "new"
-
+                            selected = newOrders
                         },
                         label = {
                             Text(text = "New")
                         })
                     FilterChip(
                         modifier = Modifier
-                            .weight(1f)
-                            .padding(start = 8.dp, end = 4.dp),
+                            .weight(1f),
                         selected = if(selectedFilter.value == "processing") true else false,
                         onClick = {
                             selectedFilter.value = "processing"
+                            selected = processingOrders
 
                         },
                         label = {
-                            Text(text = "Processing")
+                            Text(text = "Confirm")
                         })
 
                     FilterChip(
                         modifier = Modifier
-                            .weight(1f)
-                            .padding(start = 8.dp, end = 16.dp),
+                            .weight(1f),
                         selected = if(selectedFilter.value == "done") true else false,
                         onClick = {
                             selectedFilter.value = "done"
+                            selected = doneOrders
 
                         },
                         label = {
                             Text(text = "Done")
+                        })
+                    FilterChip(
+                        modifier = Modifier
+                            .weight(1f),
+                        selected = if(selectedFilter.value == "refund") true else false,
+                        onClick = {
+                            selectedFilter.value = "refund"
+                            selected = refunds
+                        },
+                        label = {
+                            Text(text = "Refund")
                         })
 
                 }
@@ -135,11 +162,8 @@ fun OrderHistoryScreen(navController: NavController) {
                 ) {
 
 
-                    if (orderedList != null) {
-
-                        items(orderedList) { item ->
-
-
+                    if (selected != null) {
+                        items(selected!!) { item ->
 
                             val statusColor = remember {
                                 mutableStateOf(Color.Gray)
@@ -149,6 +173,7 @@ fun OrderHistoryScreen(navController: NavController) {
                                 "done" -> statusColor.value = Color.Gray
                                 "processing" -> statusColor.value = Color.Blue
                                 "new" -> statusColor.value = Color.Magenta
+                                "refund" -> statusColor.value = Color.Green
 
                             }
 
@@ -158,15 +183,18 @@ fun OrderHistoryScreen(navController: NavController) {
                                     .fillMaxWidth()
                                     .border(1.dp, statusColor.value, RoundedCornerShape(20.dp))
 
+
                             ) {
                                 Row(
                                     verticalAlignment = Alignment.CenterVertically,
                                     horizontalArrangement = Arrangement.spacedBy(16.dp),
                                     modifier = Modifier.fillMaxSize()
+                                        .padding(16.dp)
                                 ) {
                                     AsyncImage(
                                         contentScale = ContentScale.Crop,
-                                        modifier = Modifier.size(100.dp),
+                                        modifier = Modifier.size(70.dp)
+                                            .clip(RoundedCornerShape(10.dp)),
                                         model = item.products.productIconUrl,
                                         contentDescription = "Image"
                                     )

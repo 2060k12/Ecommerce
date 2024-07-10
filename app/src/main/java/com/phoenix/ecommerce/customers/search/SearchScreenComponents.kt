@@ -15,17 +15,14 @@ import androidx.compose.ui.unit.dp
 
 
 @Composable
-fun SearchScreenBar( value: String, onValueChange : (change: String)-> Unit, onClick : ()->Unit) {
+fun SearchScreenBar( value: String, onValueChange : (change: String)-> Unit) {
 
     TextField(
 
         shape = RoundedCornerShape(5.dp),
 
-        trailingIcon = {
-            IconButton(onClick = {onClick()}) {
+        leadingIcon = {
                 Icon(imageVector = Icons.Filled.Search, contentDescription = "search")
-
-            }
         },
 
         modifier = Modifier

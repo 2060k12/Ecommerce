@@ -1,4 +1,4 @@
-package com.phoenix.ecommerce.admin
+package com.phoenix.ecommerce.admin.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -34,13 +33,12 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
-import com.phoenix.ecommerce.customers.homepage.EachProducts
 import com.phoenix.ecommerce.customers.homepage.HomeScreenViewModel
+import com.phoenix.ecommerce.customers.search.SearchScreenBar
 import com.phoenix.ecommerce.data.data.product.Products
 import com.phoenix.ecommerce.navigation.RoutesAdmin
 import com.phoenix.ecommerce.utils.AdminNavigationBar
 import com.phoenix.ecommerce.utils.SharedViewModel
-import okhttp3.Route
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -50,12 +48,15 @@ fun AdminEditScreen(navController: NavController, sharedViewModel: SharedViewMod
     val viewModel : HomeScreenViewModel = viewModel()
     val productList = viewModel.productList.observeAsState().value
     viewModel.getAllProducts()
-    var tempList = remember { mutableListOf(Products()) }
+    val tempList = remember { mutableListOf(Products()) }
     val searchField = remember {
         mutableStateOf("")
     }
+    val searchInputText = remember{ mutableStateOf("")}
+    var searchProducts = productList
 
-Scaffold(
+
+    Scaffold(
     topBar = {
         TopAppBar(title = {
             Text(text = "Current Listing")
@@ -65,7 +66,7 @@ Scaffold(
 
     bottomBar = {
         BottomAppBar {
-            AdminNavigationBar(navController = navController)
+            AdminNavigationBar(navController = navController, "products")
         }
     }
 ) {innerPadding->
@@ -73,27 +74,25 @@ Scaffold(
 
         Column {
 
-            TextField(
-                placeholder = {
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(10.dp)
-                    ) {
-                        Icon(imageVector = Icons.Default.Search , contentDescription ="search" )
-                        Text(text = "Search")
-                    }
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                value = searchField.value, onValueChange = {
-                    searchField.value = it
+            SearchScreenBar(
+                value = searchInputText.value,
+                onValueChange = {
+                    val temp = ArrayList<Products>()
+
+
+                    searchInputText.value = it
                     if (productList != null) {
-                        for(product in productList){
-                            if(product.productName.contains(searchField.value)){
-                                tempList.add(product)
+                        for (product in productList){
+                            if(product.productName.lowercase().contains(searchInputText.value.lowercase())){
+                                temp.add(product)
                             }
                         }
+                        searchProducts = temp
                     }
+                    if(searchInputText.value.isEmpty()){
+                        searchProducts = productList
+                    }
+
 
                 })
 
@@ -104,9 +103,9 @@ Scaffold(
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
                 columns = GridCells.Fixed(2)
             ) {
-                if (productList?.isNotEmpty() == true) {
+                if (searchProducts?.isNotEmpty() == true) {
 
-                    items(productList) { product ->
+                    items(searchProducts!!) { product ->
                         Card(
                             onClick = {
                                 if (product.productId.isNotEmpty()) {

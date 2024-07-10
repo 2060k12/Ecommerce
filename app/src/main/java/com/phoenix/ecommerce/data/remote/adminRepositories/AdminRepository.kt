@@ -37,6 +37,10 @@ class AdminRepository {
     private val _processingOrdersList = MutableLiveData<ArrayList<AdminReceivedOrder>>()
     val processingOrdersList : LiveData<ArrayList<AdminReceivedOrder>> get() = _processingOrdersList
 
+    // liveData for refunds
+    private val _refundList = MutableLiveData<ArrayList<AdminReceivedOrder>>()
+    val refundList : LiveData<ArrayList<AdminReceivedOrder>> get() = _refundList
+
     // add new product to database
     fun addNewProduct(products: Products){
 
@@ -80,6 +84,7 @@ class AdminRepository {
             val tempListNew = ArrayList<AdminReceivedOrder>()
             val tempListCompleted = ArrayList<AdminReceivedOrder>()
             val tempProcessing = ArrayList<AdminReceivedOrder>()
+            val tempRefunds = ArrayList<AdminReceivedOrder>()
         val orders =db.collection("orders")
             .get()
             .await()
@@ -89,10 +94,12 @@ class AdminRepository {
                     "new" -> tempListNew.add(temp)
                     "processing" -> tempProcessing.add(temp)
                     "done" -> tempListCompleted.add(temp)
+                    "refund" -> tempRefunds.add(temp)
                 }
             }
             _listOfReceivedOrders.value = tempListNew
             _processingOrdersList.value = tempProcessing
+            _refundList.value = tempRefunds
             _completedOrdersList.value = tempListCompleted
         }
         catch (e : Exception){
@@ -196,7 +203,50 @@ class AdminRepository {
         }
     }
 
+    fun removeProduct(products: Products, callback: (status: Boolean) -> Unit) {
+        db.collection(products.productCategory)
+            .document(products.productId)
+            .delete()
+            .addOnSuccessListener {
+                callback(true)
+            }
 
+    }
+
+    // refund an item
+     fun refund(item: AdminReceivedOrder, callback: (status: Boolean) -> Unit) {
+        try {
+            db.collection("orders")
+                .document(item.orderId)
+                .update("status", "refund")
+                .addOnSuccessListener {
+                    db.collection("users")
+                        .document(item.email)
+                        .collection("completedOrders")
+                        .document(item.orderId)
+                        .update("status", "refund")
+                    callback(true)
+                }
+
+        }catch (e: Exception){
+            Log.e("error", e.message.toString())
+        }
+    }
+
+    suspend fun updateStockCount(products: Products, newStock: Int) {
+        try {
+            db.collection(products.productCategory)
+                .document(products.productId)
+
+                .update("currentlyOnStock", newStock)
+                .await()
+
+        }catch (e: Exception)
+        {
+            Log.e("error", e.message.toString())
+        }
+
+    }
 
 
 }

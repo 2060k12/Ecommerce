@@ -58,6 +58,8 @@ class ProductsRepository {
     private val _productImageList = MutableLiveData<ArrayList<Image>>() // livedata for all images for a product
     val productImageList : LiveData<ArrayList<Image>> get()= _productImageList
 
+    private val _refundList = MutableLiveData<ArrayList<AdminReceivedOrder>>() // liveData for refunds
+    val refundList : LiveData<ArrayList<AdminReceivedOrder>> get() = _refundList
 
 
     // get all products from the database
@@ -280,6 +282,20 @@ class ProductsRepository {
 
         }
         catch (e: Exception){
+            Log.e("Error", e.message.toString())
+        }
+    }
+
+    suspend fun setFeaturedImages(product: Products, imageList: ArrayList<Image>) {
+        try {
+
+            db.collection(product.productCategory)
+                .document(product.productId)
+                .collection("featuredImages")
+                .add(imageList)
+                .await()
+
+        }catch (e: Exception){
             Log.e("Error", e.message.toString())
         }
     }

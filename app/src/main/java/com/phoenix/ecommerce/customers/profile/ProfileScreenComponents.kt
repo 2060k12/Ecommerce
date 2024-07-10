@@ -1,5 +1,6 @@
 package com.phoenix.ecommerce.customers.profile
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -28,8 +29,11 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -39,11 +43,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.google.android.play.core.integrity.z
 import com.phoenix.ecommerce.R
 import com.phoenix.ecommerce.data.data.profile.Profile
 import com.phoenix.ecommerce.navigation.Routes
+import com.phoenix.ecommerce.utils.SharedViewModel
 
 
 @Composable
@@ -98,7 +105,7 @@ fun ProfileUserName(profile : Profile, onClick: () -> Unit){
 }
 
 @Composable
-fun ProfileGeneral(profile : Profile, navController: NavController){
+fun ProfileGeneral(profile : Profile, navController: NavController, sharedViewModel: SharedViewModel){
     Card(modifier = Modifier
         .fillMaxWidth()
         .padding(16.dp)
@@ -114,13 +121,17 @@ fun ProfileGeneral(profile : Profile, navController: NavController){
                 text = "General")
 
 
-            Card(modifier = Modifier
-                .fillMaxWidth()
-                .padding( vertical = 4.dp)) {
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 4.dp)) {
                 Row(
 
-                    modifier = Modifier.padding(horizontal = 16.dp,
-                        vertical = 4.dp)
+                    modifier = Modifier
+                        .padding(
+                            horizontal = 16.dp,
+                            vertical = 4.dp
+                        )
                         .fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically) {
@@ -133,15 +144,21 @@ fun ProfileGeneral(profile : Profile, navController: NavController){
                         Spacer(modifier = Modifier.width(16.dp))
                         Text(text = profile.email)
                     }
-                    Icon(modifier = Modifier.size(30.dp),
+                    Icon(modifier = Modifier.size(20.dp),
                         imageVector = Icons.Default.Lock, contentDescription = "Profile")
                 }
             }
 
 
-            Card(modifier = Modifier
-                .fillMaxWidth()
-                .padding( vertical = 4.dp)) {
+            Card(
+                onClick = {
+                    sharedViewModel.addEditDetails("phone")
+                    sharedViewModel.addProfileInfo(profile)
+                    navController.navigate(Routes.EDIT_PROFILE_SCREEN)
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 4.dp)) {
                 Row(
                     modifier = Modifier.padding(horizontal = 16.dp,
                         vertical = 4.dp),
@@ -155,9 +172,15 @@ fun ProfileGeneral(profile : Profile, navController: NavController){
 
 
 
-            Card(modifier = Modifier
-                .fillMaxWidth()
-                .padding( vertical = 8.dp)) {
+            Card(
+                onClick = {
+                    sharedViewModel.addEditDetails("address")
+                    sharedViewModel.addProfileInfo(profile)
+                    navController.navigate(Routes.EDIT_PROFILE_SCREEN)
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp)) {
 
                 Row(
                     modifier = Modifier.padding(
@@ -193,7 +216,9 @@ fun ProfileGeneral(profile : Profile, navController: NavController){
 }
 
 @Composable
-fun ProfileNotification(){
+fun ProfileNotification(onClick: () -> Unit){
+
+    val viewModel :ProfileViewModel = viewModel()
     Card(modifier = Modifier
         .fillMaxWidth()
         .padding(16.dp)
@@ -228,14 +253,37 @@ fun ProfileNotification(){
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 8.dp)) {
+                    .padding(horizontal = 16.dp)) {
                 Row(
-                    modifier = Modifier.padding(vertical = 4.dp),
+
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier
+                        .fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically) {
-                    Icon(modifier = Modifier.size(30.dp),
-                        imageVector = Icons.Default.AccountCircle, contentDescription = "Profile")
-                    Spacer(modifier = Modifier.width(16.dp))
-                    Text(text = "Password")
+
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            modifier = Modifier.size(30.dp),
+                            imageVector = Icons.Default.Lock,
+                            contentDescription = "Profile"
+                        )
+                        Spacer(modifier = Modifier.width(16.dp))
+                        Text(text = "Password")
+                    }
+
+                    TextButton(
+                        shape = RoundedCornerShape(5.dp),
+                        onClick = {
+                            viewModel.resetPassword()
+                            onClick()
+
+
+                        }) {
+                        Text(text = "Reset")
+
+                    }
                 }
             }
 

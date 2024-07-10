@@ -107,6 +107,7 @@ fun ProductReviewScreen(navController: NavController,sharedViewModel: SharedView
         },
         bottomBar = {
            Button(
+               shape = RoundedCornerShape(5.dp),
                modifier = Modifier
                    .fillMaxWidth()
                    .padding(vertical = 30.dp, horizontal = 16.dp),

@@ -11,8 +11,8 @@ data class Products(
     val productInfo : String,
     val productColor : List<String>,
     val productSpecs : List<String>,
-    val discountedPrice : Float,
-    val currentlyOnStock: Int
+    var discountedPrice : Float,
+    var currentlyOnStock: Int
 ){
     constructor():this("","","",0, "", "", listOf(String()), listOf(String()), 0f, 0)
 }
