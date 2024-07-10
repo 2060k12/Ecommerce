@@ -45,7 +45,7 @@ fun NavigationGraph(navHostController: NavHostController, startDestination: Stri
         }
         // add images screen
         composable(Routes.ADD_IMAGES_SCREEN) {
-            AddImagesScreen( sharedViewModel, navHostController)
+            AddImagesScreen(sharedViewModel, navHostController)
         }
 
 
@@ -84,10 +84,10 @@ fun NavigationGraph(navHostController: NavHostController, startDestination: Stri
 
         // order history screen
         composable(Routes.ORDERS_HISTORY_SCREEN) {
-            
+
             OrderHistoryScreen(navController = navHostController)
         }
-        
+
         // Search Screen
         composable(Routes.SEARCH_SCREEN) {
             SearchScreen(navHostController, sharedViewModel)
@@ -129,7 +129,11 @@ fun NavigationGraph(navHostController: NavHostController, startDestination: Stri
 
         composable<RoutesAdmin.AdminEditEachProductScreen> {
             val passedArgument = it.toRoute<RoutesAdmin.AdminEditEachProductScreen>()
-            AdminEditEachProductScreen(sharedViewModel =  sharedViewModel, products = sharedViewModel.product, navHostController )
+            AdminEditEachProductScreen(
+                sharedViewModel = sharedViewModel,
+                products = sharedViewModel.product,
+                navHostController
+            )
         }
 
 
