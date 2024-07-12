@@ -2,6 +2,8 @@ Admin Login:
 Email: admin@admin.com
 password: 123456789
 
+User Login: 
+Signup for a new account
 
 Project Overview
 - Made with kotlin
