@@ -32,7 +32,12 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         startDestination = if(auth.currentUser!= null){
-            Routes.HOME_SCREEN
+            if(auth.currentUser?.email.toString().lowercase() =="admin@admin.com"){
+                Routes.ADMIN_DASHBOARD
+            }
+            else {
+                Routes.HOME_SCREEN
+            }
         } else{
             Routes.LOGIN_SCREEN
         }

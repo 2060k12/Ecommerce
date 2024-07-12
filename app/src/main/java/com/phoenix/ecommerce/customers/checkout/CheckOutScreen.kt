@@ -1,5 +1,6 @@
 package com.phoenix.ecommerce.customers.checkout
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -23,6 +24,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -30,23 +33,32 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.SemanticsProperties.Selected
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.phoenix.ecommerce.customers.cart.CartViewModel
 import com.phoenix.ecommerce.customers.profile.ProfileViewModel
 import com.phoenix.ecommerce.data.data.product.Products
+import com.phoenix.ecommerce.navigation.Routes
+import com.phoenix.ecommerce.utils.IndeterminateCircularIndicator
 import com.phoenix.ecommerce.utils.SharedViewModel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.serialization.json.JsonNull.content
+import java.util.Timer
+import kotlin.concurrent.schedule
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CheckOutScreen(sharedViewModel: SharedViewModel){
+fun CheckOutScreen(sharedViewModel: SharedViewModel, navController: NavController){
     //  checkout ViewModel
     val viewModel :CheckOutViewModel = viewModel()
 
@@ -74,11 +86,24 @@ fun CheckOutScreen(sharedViewModel: SharedViewModel){
         userDeliveryAddress = profileViewModel.currentUsersProfile.value.address
     }
 
+    if(userDeliveryAddress.isEmpty()){
+        currentAddressCheckedState = false
+        newAddressChecked = false
+    }
+
+    // loading state
+    val loading = remember{ mutableStateOf(false) }
+
+    val snackBarHostState = remember{SnackbarHostState()}
+    val snackBarScope = rememberCoroutineScope()
 
     profileViewModel.getCurrentUserProfile()
 
 
     Scaffold(
+        snackbarHost = {
+            SnackbarHost(hostState = snackBarHostState)
+        },
 
         bottomBar = {
             Column(modifier = Modifier.padding(0.dp,0.dp,0.dp,30.dp)) {
@@ -89,12 +114,27 @@ fun CheckOutScreen(sharedViewModel: SharedViewModel){
                     shape = RoundedCornerShape(10.dp),
                     onClick = {
 
-                        viewModel.checkOut(listOfCartProducts, userDeliveryAddress){
-                            success->
-                            if(success){
-                                cartViewModel.clear()
+                        if(userDeliveryAddress.isNotEmpty()) {
+                            loading.value = true
+                            viewModel.checkOut(listOfCartProducts, userDeliveryAddress) { success ->
+                                if (success) {
+                                    userDeliveryAddress = ""
+                                    newAddressChecked = false
+                                    currentAddressCheckedState = false
+                                    cartViewModel.clear()
+                                    snackBarScope.launch {
+                                        loading.value = false
+                                        snackBarHostState.showSnackbar("Order places Successfully")
+                                    }
+                                }
                             }
                         }
+                        else{
+                            snackBarScope.launch {
+                                snackBarHostState.showSnackbar("Choose an address First" )
+                            }
+                        }
+
                     }) {
                     Text(text = "Confirm Order")
 
@@ -104,7 +144,7 @@ fun CheckOutScreen(sharedViewModel: SharedViewModel){
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
                     shape = RoundedCornerShape(10.dp),
-                    onClick = { /*TODO*/ }) {
+                    onClick = { navController.navigateUp()}) {
                     Text(text = "Cancel")
 
                 }
@@ -115,12 +155,12 @@ fun CheckOutScreen(sharedViewModel: SharedViewModel){
         topBar = {
             TopAppBar(
                 navigationIcon = {
-                    IconButton(onClick = { /*TODO*/ }) {
+                    IconButton(onClick = {navController.navigateUp() }) {
                         Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
                     }
                 },
                 title = {
-                    Text(text = "CheckOut")
+                    Text(text = "Checkout")
                 })
 
 
@@ -131,13 +171,16 @@ fun CheckOutScreen(sharedViewModel: SharedViewModel){
         Surface(modifier = Modifier.padding(innerPadding)) {
 
 
+            IndeterminateCircularIndicator(loading = loading.value)
+
+
             Column {
 
                 // for current address in user's account
                 Box(modifier = Modifier
                     .wrapContentSize()
                     ){
-                CheckOutAddress("Home", "20 albert Parade,\nAshfield, 2131\nNSW"){
+                CheckOutAddress("Home", profileViewModel.currentUsersProfile.value.address){
                     currentAddressCheckedState = it
                     newAddressChecked = false
                 }}
@@ -147,7 +190,6 @@ fun CheckOutScreen(sharedViewModel: SharedViewModel){
                     .wrapContentSize()
                     .clickable {
                         newAddressDialogueBox = true
-
                     }){
                 CheckOutAddress(){
                     currentAddressCheckedState = false
@@ -216,21 +258,28 @@ fun CheckOutScreen(sharedViewModel: SharedViewModel){
 
                 }
                 }
-                Text(text = userDeliveryAddress)
 
 
+                Text(
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    text = "Selected Address: ")
 
+                if(userDeliveryAddress.isNotEmpty())
+                Text(
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Normal,
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    text = userDeliveryAddress)
 
-
-
+                else Text(
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Normal,
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    text = "Choose an address")
             }
             CheckOutPayment()
         }
     }
-}
-
-
-@Composable
-fun CheckOutScreenPreview(){
-    CheckOutScreen(sharedViewModel = SharedViewModel())
 }

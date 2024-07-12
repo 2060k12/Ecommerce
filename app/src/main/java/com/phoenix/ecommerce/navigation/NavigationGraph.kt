@@ -36,9 +36,6 @@ fun NavigationGraph(navHostController: NavHostController, startDestination: Stri
     // TODO: change to start destination
 
     NavHost(navController = navHostController, startDestination = startDestination) {
-//    NavHost(navController = navHostController, startDestination = RoutesAdmin.AdminAddScreenOne ) {
-
-
         // products review screen
         composable(Routes.PRODUCT_REVIEW_SCREEN) {
             ProductReviewScreen(navController = navHostController, sharedViewModel)
@@ -105,7 +102,7 @@ fun NavigationGraph(navHostController: NavHostController, startDestination: Stri
 
         // CHeckOut Screen
         composable<RoutesAdmin.CheckOutScreen> {
-            CheckOutScreen(sharedViewModel)
+            CheckOutScreen(sharedViewModel, navHostController)
         }
 
         // SIGNUP SCREEN

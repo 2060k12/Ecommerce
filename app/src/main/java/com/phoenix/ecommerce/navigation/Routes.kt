@@ -30,7 +30,6 @@ sealed class RoutesAdmin{
     @Serializable
     data object AdminDashBoard : RoutesAdmin()
 
-
     // admin edit screen
     @Serializable
     data object  AdminEditScreen : RoutesAdmin()

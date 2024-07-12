@@ -37,6 +37,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -44,13 +45,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.phoenix.ecommerce.admin.ui.galleryLauncher
+import com.phoenix.ecommerce.navigation.Routes
+import com.phoenix.ecommerce.utils.IndeterminateCircularIndicator
 import com.phoenix.ecommerce.utils.SharedViewModel
 import kotlinx.coroutines.launch
+import okhttp3.Route
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -61,6 +67,9 @@ fun EditProfileScreen(navController: NavController, sharedViewModel: SharedViewM
     val phone = sharedViewModel.profileInfo.phone
     val address = sharedViewModel.profileInfo.address
     val imageLink = sharedViewModel.profileInfo.profileImage
+    var imgLink = remember {
+        mutableStateOf(imageLink)
+    }
 
     val viewModel : ProfileViewModel = viewModel()
 
@@ -78,6 +87,10 @@ fun EditProfileScreen(navController: NavController, sharedViewModel: SharedViewM
     }
     val snackBarScope = rememberCoroutineScope()
 
+    val launcher = galleryLauncher {
+        img.value = it.toString()
+        imgLink.value = it.toString()
+    }
 
 
     Scaffold(
@@ -112,14 +125,33 @@ fun EditProfileScreen(navController: NavController, sharedViewModel: SharedViewM
                         .fillMaxWidth(),
                     onClick = {
                         when(sharedViewModel.editDetail){
-                            "nameAndImage" ->
-                                viewModel.editProfileNameImage(sharedViewModel.profileInfo, sharedViewModel.editDetail, nameText.value,img.value)
 
-                            "phone" ->
-                                viewModel.editProfileInformation(sharedViewModel.profileInfo, sharedViewModel.editDetail, editedInfo = phoneText.value)
-                            "address" ->
-                                viewModel.editProfileInformation(sharedViewModel.profileInfo, sharedViewModel.editDetail, editedInfo = addressText.value)
+                            "nameAndImage" -> {
+                                viewModel.editProfileNameImage(
+                                    sharedViewModel.profileInfo,
+                                    sharedViewModel.editDetail,
+                                    nameText.value,
+                                    img.value
+                                )
+                                navController.navigate(Routes.PROFILE_SCREEN)
+                            }
 
+                            "phone" -> {
+                                viewModel.editProfileInformation(
+                                    sharedViewModel.profileInfo,
+                                    sharedViewModel.editDetail,
+                                    editedInfo = phoneText.value
+                                )
+                                navController.navigate(Routes.PROFILE_SCREEN)
+                            }
+                            "address" -> {
+                                viewModel.editProfileInformation(
+                                    sharedViewModel.profileInfo,
+                                    sharedViewModel.editDetail,
+                                    editedInfo = addressText.value
+                                )
+                                navController.navigate(Routes.PROFILE_SCREEN)
+                            }
                         }
 
                     }) {
@@ -153,6 +185,7 @@ fun EditProfileScreen(navController: NavController, sharedViewModel: SharedViewM
                     .padding(innerPadding)
                     .fillMaxSize()) {
                 Card(
+                    onClick = launcher,
                     shape = CircleShape,
                     modifier = Modifier.size(200.dp)
                 ) {
@@ -165,17 +198,15 @@ fun EditProfileScreen(navController: NavController, sharedViewModel: SharedViewM
                     ) {
 
                         AsyncImage(
+                            contentScale = ContentScale.Crop,
                             modifier = Modifier.fillMaxSize(),
-                            model = imageLink, contentDescription = ""
+                            model = imgLink.value, contentDescription = ""
                         )
 
 
                         Row(
                             modifier = Modifier
-                                .padding(vertical = 16.dp, horizontal = 30.dp)
-                                .clickable {
-                                    println("Hello World")
-                                },
+                                .padding(vertical = 16.dp, horizontal = 30.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Icon(
@@ -186,6 +217,7 @@ fun EditProfileScreen(navController: NavController, sharedViewModel: SharedViewM
                             Text(text = "Edit")
                         }
                     }
+
                 }
 
                 Spacer(modifier = Modifier.height(20.dp))

@@ -7,6 +7,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -25,12 +28,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.phoenix.ecommerce.admin.AdminViewModel
+import com.phoenix.ecommerce.navigation.Routes
 import com.phoenix.ecommerce.utils.AdminNavigationBar
 import kotlinx.coroutines.launch
 
@@ -70,7 +76,34 @@ fun AdminScreen(navController: NavController) {
 
         // bottom bar
         bottomBar = {
-            AdminNavigationBar(navController,"dashboard")
+            Column {
+
+                Button(
+                    colors = ButtonColors(
+                        containerColor = Color.Red,
+                        contentColor = Color.White,
+                        disabledContainerColor = Color.Gray,
+                        disabledContentColor = Color.Black
+
+                    ),
+                    shape = RoundedCornerShape(5.dp),
+                    modifier = Modifier.fillMaxWidth()
+                        .padding(16.dp),
+                    onClick = {
+                        viewModel.signOut()
+                        navController.navigate(Routes.LOGIN_SCREEN){
+                            popUpTo(Routes.LOGIN_SCREEN){
+                                inclusive = true
+                            }
+                        }
+
+                    }) {
+                    Text(
+                        fontWeight = Bold,
+                        text = "Sign Out")
+                }
+                AdminNavigationBar(navController, "dashboard")
+            }
         }
 
     ) {
@@ -136,21 +169,29 @@ fun AdminScreen(navController: NavController) {
                 }
 
 
-
-
                 LazyColumn {
 
                     when (tabIndex) {
                         0 ->
                             items(listOfReceivedOrder) { item ->
                                 viewModel.getAllReceivedOrders()
-                                ReceivedOrders(item) {
+                                ReceivedOrders(item,
+                                    onClick = {
                                     viewModel.addProductsAsProcessing(item)
                                     snackBarScope.launch {
                                         snackBarHostState.showSnackbar("Processing item")
                                     }
                                     viewModel.getAllReceivedOrders()
-                                }
+                                },
+                                    onReturnClick = {
+                                        viewModel.refundProduct(item){
+                                            snackBarScope.launch {
+                                                snackBarHostState.showSnackbar("Product Successfully refunded")
+                                            }
+                                            viewModel.getAllReceivedOrders()
+                                        }
+
+                                })
                             }
                         
                         
@@ -160,14 +201,23 @@ fun AdminScreen(navController: NavController) {
 
                         1 -> items(processingOrdersList) { item ->
                             viewModel.getAllReceivedOrders()
-                            ProcessingOrders(item){
+                            ProcessingOrders(item,{
                                 viewModel.addProductAsCompleted(item)
                                 snackBarScope.launch {
                                     snackBarHostState.showSnackbar("Marked as Done")
                                 }
                                 viewModel.getAllReceivedOrders()
 
-                            }
+                            },
+                                onReturnClick = {
+                                    viewModel.refundProduct(item){
+                                        snackBarScope.launch {
+                                            snackBarHostState.showSnackbar("Product Successfully refunded")
+                                        }
+                                        viewModel.getAllReceivedOrders()
+                                    }
+
+                                })
                         }
 
 
@@ -175,7 +225,6 @@ fun AdminScreen(navController: NavController) {
                             viewModel.getAllReceivedOrders()
                             CompletedOrders(item){
                                 viewModel.refundProduct(item){
-
                                     snackBarScope.launch {
                                         snackBarHostState.showSnackbar("Product Successfully refunded")
                                     }
@@ -189,9 +238,6 @@ fun AdminScreen(navController: NavController) {
                             viewModel.getAllReceivedOrders()
                             RefundedOrders(item)
                         }
-
-
-
                     }
 
 

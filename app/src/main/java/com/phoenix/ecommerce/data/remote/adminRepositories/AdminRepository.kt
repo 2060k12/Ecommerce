@@ -77,7 +77,6 @@ class AdminRepository {
 
     }
 
-    // TODO: Fix processing  
     // fun to get list of all new orders
     suspend fun getAllOrders(){
         try{
@@ -246,6 +245,11 @@ class AdminRepository {
             Log.e("error", e.message.toString())
         }
 
+    }
+
+    // Sign out admin
+    fun signOut() {
+        auth.signOut()
     }
 
 

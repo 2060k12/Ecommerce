@@ -48,6 +48,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.phoenix.ecommerce.admin.AdminViewModel
@@ -127,7 +128,8 @@ fun EachColorPickerCard(containerColor: Color,  colorName: String, onClick : () 
 
 
 @Composable
-fun ReceivedOrders(receivedOrder: AdminReceivedOrder, onClick: () -> Unit) {
+fun ReceivedOrders(receivedOrder: AdminReceivedOrder, onClick: () -> Unit, onReturnClick: () -> Unit) {
+    val viewModel : AdminViewModel = viewModel()
     val expandableState = remember{ mutableStateOf(false) }
     val cardHeight by animateDpAsState(targetValue = if (expandableState.value) 310.dp else 100.dp)
 
@@ -256,7 +258,9 @@ fun ReceivedOrders(receivedOrder: AdminReceivedOrder, onClick: () -> Unit) {
                                 .fillMaxWidth()
                                 .weight(1f)
                                 .padding(top = 8.dp, end = 4.dp),
-                            onClick = { }) {
+                            onClick = {
+                               onReturnClick()
+                            }) {
                             Text(text = "Cancel")
 
                         }
@@ -288,7 +292,7 @@ fun ReceivedOrders(receivedOrder: AdminReceivedOrder, onClick: () -> Unit) {
 
 
 @Composable
-fun ProcessingOrders(receivedOrder: AdminReceivedOrder, onClick: () -> Unit) {
+fun ProcessingOrders(receivedOrder: AdminReceivedOrder, onClick: () -> Unit, onReturnClick: () -> Unit) {
     val expandableState = remember{ mutableStateOf(false) }
     val cardHeight by animateDpAsState(targetValue = if (expandableState.value) 310.dp else 100.dp )
 
@@ -418,7 +422,9 @@ fun ProcessingOrders(receivedOrder: AdminReceivedOrder, onClick: () -> Unit) {
                                 .fillMaxWidth()
                                 .weight(1f)
                                 .padding(top = 8.dp, end = 4.dp),
-                            onClick = { }) {
+                            onClick = {
+                                onReturnClick()
+                            }) {
                             Text(text = "Cancel")
 
                         }
