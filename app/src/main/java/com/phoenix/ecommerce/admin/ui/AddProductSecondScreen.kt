@@ -1,5 +1,6 @@
 package com.phoenix.ecommerce.admin.ui
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -43,6 +44,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.sp
@@ -50,6 +52,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.phoenix.ecommerce.admin.AdminViewModel
 import com.phoenix.ecommerce.data.data.product.Products
+import com.phoenix.ecommerce.navigation.Routes
 import java.util.UUID
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -76,6 +79,7 @@ fun AddProductSecondScreen(navController: NavController, productName: String, pr
         mutableStateOf("")
     }
 
+    val context = LocalContext.current
 
 
     Scaffold(
@@ -120,6 +124,12 @@ fun AddProductSecondScreen(navController: NavController, productName: String, pr
                             stockCount.value.toInt()
                         )
                         viewModel.addNewProduct(product)
+                        navController.navigate(Routes.ADMIN_DASHBOARD){
+                            popUpTo(Routes.ADMIN_DASHBOARD){
+                                inclusive = true
+                            }
+                        }
+                        Toast.makeText(context, "Data added Successfully", Toast.LENGTH_SHORT).show()
 
 
 

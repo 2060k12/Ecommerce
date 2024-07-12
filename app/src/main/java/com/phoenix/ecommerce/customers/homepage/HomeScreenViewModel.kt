@@ -1,5 +1,9 @@
 package com.phoenix.ecommerce.customers.homepage
 
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.phoenix.ecommerce.data.remote.repository.ProductsRepository
@@ -18,12 +22,21 @@ class HomeScreenViewModel: ViewModel() {
     val productList get() =  productRepository.productList
     val offerList get() =  productRepository.offerList
 
+    //loading data
+    private val _isLoading = MutableLiveData<Boolean>(true)
+    val isLoading get() = _isLoading
 
     // function to get allProducts from firestore database
     // getAllProduct is a suspend function in ProductRepository
     fun getAllProducts(){
         viewModelScope.launch {
-            productRepository.getAllProducts()
+            _isLoading.value = true
+            try {
+                productRepository.getAllProducts()
+            }
+            finally {
+                _isLoading.value = false
+            }
         }
     }
 
@@ -50,12 +63,14 @@ class HomeScreenViewModel: ViewModel() {
             productRepository.getAllWatches()
         }
     }
-
-
     fun getAllOffers(){
         viewModelScope.launch {
-
-            productRepository.getAllOffers()
+            _isLoading.value = true
+            try {
+                productRepository.getAllOffers()
+            }finally {
+                _isLoading.value = false
+            }
         }
     }
 

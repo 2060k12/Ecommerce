@@ -1,5 +1,6 @@
 package com.phoenix.ecommerce.login
 
+import android.annotation.SuppressLint
 import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -40,6 +41,7 @@ import androidx.navigation.compose.rememberNavController
 import com.phoenix.ecommerce.navigation.Routes
 
 
+@SuppressLint("SuspiciousIndentation")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(navController: NavController){
@@ -67,7 +69,19 @@ fun LoginScreen(navController: NavController){
                     viewModel.login(email.value, password.value){
                         success ->
                         if(success){
-                            navController.navigate(Routes.HOME_SCREEN)
+                            if(email.value == "admin@admin.com"){
+                                navController.navigate(Routes.ADMIN_DASHBOARD){
+                                    popUpTo(Routes.ADMIN_DASHBOARD){
+                                        inclusive = true
+                                    }
+                                }
+                            }
+                            else
+                            navController.navigate(Routes.HOME_SCREEN){
+                                popUpTo(Routes.HOME_SCREEN){
+                                    inclusive = true
+                                }
+                            }
 
                         }
                         else{

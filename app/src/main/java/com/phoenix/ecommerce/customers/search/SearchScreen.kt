@@ -21,6 +21,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -45,6 +46,7 @@ import com.phoenix.ecommerce.data.data.product.Products
 import com.phoenix.ecommerce.navigation.Routes
 import com.phoenix.ecommerce.navigation.RoutesAdmin
 import com.phoenix.ecommerce.utils.BottomNavBar
+import com.phoenix.ecommerce.utils.IndeterminateCircularIndicator
 import com.phoenix.ecommerce.utils.SharedViewModel
 
 
@@ -56,8 +58,8 @@ fun SearchScreen(navController: NavController, sharedViewModel: SharedViewModel)
     val allProducts = viewModel.productList.observeAsState().value
     val context = LocalContext.current
     val searchInputText = remember{ mutableStateOf("")}
+    val loading = viewModel.isLoading.observeAsState(true)
     viewModel.getAllProducts()
-
     var searchProducts = allProducts
 
 
@@ -85,11 +87,19 @@ fun SearchScreen(navController: NavController, sharedViewModel: SharedViewModel)
 
         content = {
             innerPadding->
-            Column (
+            
+            Surface(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(innerPadding)
+            ) {
+                IndeterminateCircularIndicator(loading = loading.value)
+                
+            Column (
+                modifier = Modifier
+                    .fillMaxSize()
             ){
+                
                 SearchScreenBar(
                     value = searchInputText.value,
                     onValueChange = {
@@ -154,7 +164,7 @@ fun SearchScreen(navController: NavController, sharedViewModel: SharedViewModel)
 
 
             }
-        }
+        }}
 
     )
 

@@ -59,6 +59,7 @@ fun CartScreen(navController: NavController, sharedViewModel: SharedViewModel){
         bottomBar = {
             Column {
                 Button(
+                    enabled = cartList.isNotEmpty(),
                     shape = RoundedCornerShape(10.dp),
                     modifier = Modifier
                         .fillMaxWidth()
@@ -81,6 +82,7 @@ fun CartScreen(navController: NavController, sharedViewModel: SharedViewModel){
         innerPadding ->
 
         Surface(
+
             modifier = Modifier.padding(innerPadding)) {
 
             LazyColumn (
@@ -89,6 +91,11 @@ fun CartScreen(navController: NavController, sharedViewModel: SharedViewModel){
                     .padding(16.dp)
                     .fillMaxSize()) {
 
+                if(productList.isEmpty()) {
+                    item {
+                        Text(text = "Empty Cart")
+                    }
+                }
                 items(cartList){
                     EachCartItem(navController, cartProduct = it )
                 }

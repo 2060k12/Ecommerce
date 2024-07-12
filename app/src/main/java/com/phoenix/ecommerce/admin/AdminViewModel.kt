@@ -82,5 +82,8 @@ class AdminViewModel: ViewModel() {
 
     }
 
+    fun signOut() {
+        repository.signOut()    }
+
 
 }

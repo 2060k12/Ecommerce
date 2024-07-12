@@ -1,8 +1,10 @@
 package com.phoenix.ecommerce.data.remote.repository
 
+import android.net.Uri
 import android.provider.ContactsContract.CommonDataKinds.Im
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
+import androidx.core.net.toUri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.Firebase
@@ -10,12 +12,14 @@ import com.google.firebase.Timestamp
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.firestore
 import com.google.firebase.firestore.toObject
+import com.google.firebase.storage.storage
 import com.phoenix.ecommerce.data.data.AdminReceivedOrder
 import com.phoenix.ecommerce.data.data.product.Image
 import com.phoenix.ecommerce.data.data.product.Products
 import com.phoenix.ecommerce.data.data.product.Review
 import com.phoenix.ecommerce.data.data.profile.Profile
 import kotlinx.coroutines.tasks.await
+import java.util.UUID
 import kotlin.math.log
 
 class ProductsRepository {
@@ -25,6 +29,8 @@ class ProductsRepository {
     // authentication by firebase
     val auth = Firebase.auth
 
+    // Firebase Storage
+    private val storage = Firebase.storage
 
     // mutable State for product
     private val _clickedProduct = mutableStateOf<Products?>(null)
@@ -287,18 +293,40 @@ class ProductsRepository {
     }
 
     suspend fun setFeaturedImages(product: Products, imageList: ArrayList<Image>) {
-        try {
+            var downloadUrl : Uri
+            val path: String = "${product.productCategory}/${product.productId}/post" + UUID.randomUUID() + ".png"
+            val storageReference = storage.getReference(path)
 
-            db.collection(product.productCategory)
-                .document(product.productId)
-                .collection("featuredImages")
-                .add(imageList)
-                .await()
+            try {
+                for(image in imageList) {
+                    val uploadTask = storageReference
+                        .putFile(image.image.toUri())
+                        .addOnSuccessListener {
+                            Log.i("Success", "Done")
+                        }
+                    val uriTask = uploadTask.continueWithTask {
+                        storageReference.downloadUrl
+                            .addOnCompleteListener { task ->
+                                if (task.isSuccessful) {
+                                    downloadUrl = task.result
+                                    product.productIconUrl = downloadUrl.toString()
+                                    // add the download link
+                                    db.collection(product.productCategory)
+                                        .document(product.productId)
+                                        .collection("featuredImages")
+                                        .add(
+                                            mapOf("image" to downloadUrl))
 
-        }catch (e: Exception){
-            Log.e("Error", e.message.toString())
+                                } else {
+                                    Log.i("Failed", "Failed to get download link")
+                                }
+                            }
+                    }
+                }
+
+            }catch (e : Exception){
+                Log.e("Error", "Uploading Failed")
+            }
+
         }
-    }
-
-
 }
